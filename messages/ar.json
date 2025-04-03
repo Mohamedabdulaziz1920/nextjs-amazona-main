@@ -517,5 +517,8 @@
     "DeleteConfirmation": "هل أنت متأكد من حذف هذا المنتج؟",
     "Delete": "حذف",
     "Cancel": "إلغاء"
+  },
+  "message": {
+    "Seeded database successfully": "قاعدة البيانات المصنفة بنجاح"
   }
 }
