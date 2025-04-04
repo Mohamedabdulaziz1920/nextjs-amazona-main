@@ -5,7 +5,6 @@ import {
   getProductBySlug,
   getRelatedProductsByCategory,
 } from '@/lib/actions/product.actions'
-
 import ReviewList from './review-list'
 import { generateId, round2 } from '@/lib/utils'
 import SelectVariant from '@/components/shared/product/select-variant'
@@ -45,9 +44,7 @@ export default async function ProductDetails({
   const { slug } = params
 
   const session = await auth()
-
   const product = await getProductBySlug(slug)
-
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
     productId: product._id,
@@ -55,6 +52,7 @@ export default async function ProductDetails({
   })
 
   const t = await getTranslations()
+
   return (
     <div>
       <AddToBrowsingHistory id={product._id} category={product.category} />
