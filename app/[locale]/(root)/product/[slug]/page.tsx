@@ -18,11 +18,12 @@ import RatingSummary from '@/components/shared/product/rating-summary'
 import ProductSlider from '@/components/shared/product/product-slider'
 import { getTranslations } from 'next-intl/server'
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug: string }>
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
 }) {
   const t = await getTranslations()
-  const params = await props.params
   const product = await getProductBySlug(params.slug)
   if (!product) {
     return { title: t('Product.Product not found') }
@@ -33,15 +34,14 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function ProductDetails(props: {
+export default async function ProductDetails({
+  params,
+  searchParams,
+}: {
   params: { slug: string }
-  searchParams: { page: string; color: string; size: string }
+  searchParams: { page?: string; color?: string; size?: string }
 }) {
-  const searchParams = await props.searchParams
-
   const { page, color, size } = searchParams
-
-  const params = await props.params
 
   const { slug } = params
 
