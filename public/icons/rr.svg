@@ -5,5 +5,5 @@
 	</defs>
 	<style>
 	</style>
-	<use id="Background" style="mix-blend-mode: screen" href="#img1" x="95" y="26"/>
+	<use id="Background" href="#img1" x="95" y="26"/>
 </svg>
