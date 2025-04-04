@@ -31,7 +31,7 @@ export const ProductInputSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
   slug: z.string().min(3, 'Slug must be at least 3 characters'),
   category: z.string().min(1, 'Category is required'),
-  images: z.array(z.string()).min(1, 'Product must have at least one image'),
+  images: z.array(z.string()).min(0, 'Product must have at least one image'),
   brand: z.string().min(1, 'Brand is required'),
   description: z.string().min(1, 'Description is required'),
   isPublished: z.boolean(),
@@ -218,10 +218,10 @@ export const SiteLanguageSchema = z.object({
   code: z.string().min(1, 'Code is required'),
 })
 export const CarouselSchema = z.object({
-  title: z.string().min(1, 'title is required'),
-  url: z.string().min(1, 'url is required'),
-  image: z.string().min(1, 'image is required'),
-  buttonCaption: z.string().min(1, 'buttonCaption is required'),
+  title: z.string().optional(), // غير مطلوب
+  url: z.string().optional(), // غير مطلوب
+  image: z.string().min(1, 'image is required'), // مطلوب فقط
+  buttonCaption: z.string().optional(), // غير مطلوب
 })
 
 export const SiteCurrencySchema = z.object({

@@ -516,5 +516,19 @@
     "DeleteConfirmation": "Are you sure you want to delete this product?",
     "Delete": "Delete",
     "Cancel": "Cancel"
+  },
+  "products": {
+    "createSuccess": "Product created successfully",
+    "updateSuccess": "Product updated successfully",
+    "deleteSuccess": "Product deleted successfully",
+    "notFound": "Product not found",
+    "error": "An error occurred",
+    "sortOptions": {
+      "latest": "Latest",
+      "bestSelling": "Best Selling",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "avgRating": "Avg. Rating"
+    }
   }
 }

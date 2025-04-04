@@ -42,6 +42,7 @@ export default function CarouselForm({
         <div className='space-y-4'>
           {fields.map((field, index) => (
             <div key={field.id} className='flex justify-between gap-1 w-full'>
+              {/* العنوان - غير مطلوب */}
               <FormField
                 control={form.control}
                 name={`carousels.${index}.title`}
@@ -51,12 +52,11 @@ export default function CarouselForm({
                     <FormControl>
                       <Input {...field} placeholder={t('title')} />
                     </FormControl>
-                    <FormMessage>
-                      {errors.carousels?.[index]?.title?.message}
-                    </FormMessage>
                   </FormItem>
                 )}
               />
+              
+              {/* الرابط - غير مطلوب */}
               <FormField
                 control={form.control}
                 name={`carousels.${index}.url`}
@@ -66,12 +66,11 @@ export default function CarouselForm({
                     <FormControl>
                       <Input {...field} placeholder={t('url')} />
                     </FormControl>
-                    <FormMessage>
-                      {errors.carousels?.[index]?.url?.message}
-                    </FormMessage>
                   </FormItem>
                 )}
               />
+              
+              {/* نص الزر - غير مطلوب */}
               <FormField
                 control={form.control}
                 name={`carousels.${index}.buttonCaption`}
@@ -81,23 +80,28 @@ export default function CarouselForm({
                     <FormControl>
                       <Input {...field} placeholder={t('buttonCaption')} />
                     </FormControl>
-                    <FormMessage>
-                      {errors.carousels?.[index]?.buttonCaption?.message}
-                    </FormMessage>
                   </FormItem>
                 )}
               />
+              
+              {/* الصورة - مطلوبة */}
               <div>
                 <FormField
                   control={form.control}
                   name={`carousels.${index}.image`}
                   render={({ field }) => (
                     <FormItem>
-                      {index == 0 && <FormLabel>{t('image')}</FormLabel>}
+                      {index == 0 && <FormLabel>{t('image')}*</FormLabel>}
                       <FormControl>
-                        <Input placeholder={t('enterImageUrl')} {...field} />
+                        <Input 
+                          placeholder={t('enterImageUrl')} 
+                          {...field} 
+                          required
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage>
+                        {errors.carousels?.[index]?.image?.message}
+                      </FormMessage>
                     </FormItem>
                   )}
                 />
@@ -126,6 +130,8 @@ export default function CarouselForm({
                   />
                 )}
               </div>
+              
+              {/* زر الحذف */}
               <div>
                 {index == 0 && <div>{t('action')}</div>}
                 <Button

@@ -29,15 +29,15 @@ import { useTranslations } from 'next-intl'
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === 'development'
     ? {
-        name: 'Sample Product',
-        slug: 'sample-product',
-        category: 'Sample Category',
-        images: ['/images/p11-1.jpg'],
-        brand: 'Sample Brand',
-        description: 'This is a sample description of the product.',
-        price: 99.99,
+        name: '',
+        slug: '',
+        category: '',
+        images: [],
+        brand: '',
+        description: '',
+        price: 0,
         listPrice: 0,
-        countInStock: 15,
+        countInStock: 0,
         numReviews: 0,
         avgRating: 0,
         numSales: 0,

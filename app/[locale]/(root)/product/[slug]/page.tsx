@@ -34,8 +34,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function ProductDetails(props: {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ page: string; color: string; size: string }>
+  params: { slug: string }
+  searchParams: { page: string; color: string; size: string }
 }) {
   const searchParams = await props.searchParams
 

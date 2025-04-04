@@ -1,4 +1,3 @@
-'use client'
 import Link from 'next/link'
 import ProductForm from '../product-form'
 import { Metadata } from 'next'

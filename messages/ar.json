@@ -34,6 +34,7 @@
     "Go to cart": "اذهب إلى السلة"
   },
   "Home": {
+    "الملوك اون لاين": "الملوك اون لاين",
     "Categories to explore": "فئات للاستكشاف",
     "See More": "شاهد المزيد",
     "Explore New Arrivals": "اكتشف الوافدين الجدد",
@@ -520,5 +521,19 @@
   },
   "message": {
     "Seeded database successfully": "قاعدة البيانات المصنفة بنجاح"
+  },
+  "products": {
+    "createSuccess": "تم إنشاء المنتج بنجاح",
+    "updateSuccess": "تم تحديث المنتج بنجاح",
+    "deleteSuccess": "تم حذف المنتج بنجاح",
+    "notFound": "المنتج غير موجود",
+    "error": "حدث خطأ",
+    "sortOptions": {
+      "latest": "الأحدث",
+      "bestSelling": "الأكثر مبيعاً",
+      "priceLowToHigh": "السعر: من الأقل للأعلى",
+      "priceHighToLow": "السعر: من الأعلى للأقل",
+      "avgRating": "متوسط التقييم"
+    }
   }
 }

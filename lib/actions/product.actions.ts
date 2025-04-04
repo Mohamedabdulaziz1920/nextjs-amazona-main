@@ -8,9 +8,11 @@ import { ProductInputSchema, ProductUpdateSchema } from '../validator'
 import { IProductInput } from '@/types'
 import { z } from 'zod'
 import { getSetting } from './setting.actions'
-
+import { getTranslations } from 'next-intl/server'
 // CREATE
 export async function createProduct(data: IProductInput) {
+  const t = await getTranslations('products')
+
   try {
     const product = ProductInputSchema.parse(data)
     await connectToDatabase()
@@ -18,15 +20,20 @@ export async function createProduct(data: IProductInput) {
     revalidatePath('/admin/products')
     return {
       success: true,
-      message: 'Product created successfully',
+      message: t('createSuccess'),
     }
   } catch (error) {
-    return { success: false, message: formatError(error) }
+    return {
+      success: false,
+      message: `${t('error')}: ${formatError(error)}`,
+    }
   }
 }
 
 // UPDATE
 export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
+  const t = await getTranslations('products')
+
   try {
     const product = ProductUpdateSchema.parse(data)
     await connectToDatabase()
@@ -34,25 +41,34 @@ export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
     revalidatePath('/admin/products')
     return {
       success: true,
-      message: 'Product updated successfully',
+      message: t('updateSuccess'),
     }
   } catch (error) {
-    return { success: false, message: formatError(error) }
+    return {
+      success: false,
+      message: `${t('error')}: ${formatError(error)}`,
+    }
   }
 }
+
 // DELETE
 export async function deleteProduct(id: string) {
+  const t = await getTranslations('products')
+
   try {
     await connectToDatabase()
     const res = await Product.findByIdAndDelete(id)
-    if (!res) throw new Error('Product not found')
+    if (!res) throw new Error(t('notFound'))
     revalidatePath('/admin/products')
     return {
       success: true,
-      message: 'Product deleted successfully',
+      message: t('deleteSuccess'),
     }
   } catch (error) {
-    return { success: false, message: formatError(error) }
+    return {
+      success: false,
+      message: `${t('error')}: ${formatError(error)}`,
+    }
   }
 }
 // GET ONE PRODUCT BY ID
