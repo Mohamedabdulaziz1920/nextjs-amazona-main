@@ -42,7 +42,6 @@ export default async function ProductDetails({
   searchParams: { page?: string; color?: string; size?: string }
 }) {
   const { page, color, size } = searchParams
-
   const { slug } = params
 
   const session = await auth()
