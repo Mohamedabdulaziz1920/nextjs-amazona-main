@@ -401,7 +401,21 @@
       "9": "September",
       "10": "October",
       "11": "November",
-      "12": "December"
+      "12": "December",
+      "2025-02": "February 2025",
+      "2025-01": "January 2025"
+    }
+  },
+  "DeleteDialog": {
+    "deleteButton": "Delete",
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone.",
+    "cancelButton": "Cancel",
+    "confirmButton": "Yes, delete",
+    "deletingText": "Deleting...",
+    "toast": {
+      "success": "Successfully deleted",
+      "error": "An error occurred while deleting"
     }
   },
   "WebPage": {

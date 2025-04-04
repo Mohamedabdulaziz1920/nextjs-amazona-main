@@ -188,9 +188,16 @@ export async function getProductsByTag({
 // GET ONE PRODUCT BY SLUG
 export async function getProductBySlug(slug: string) {
   await connectToDatabase()
-  const product = await Product.findOne({ slug, isPublished: true })
+
+  const decodedSlug = decodeURIComponent(slug) // أضف هذا السطر
+  console.log('Decoded slug:', decodedSlug) // للتحقق
+
+  const product = await Product.findOne({
+    slug: decodedSlug, // استخدم القيمة المفكوكة
+    isPublished: true,
+  })
   if (!product) throw new Error('Product not found')
-  return JSON.parse(JSON.stringify(product)) as IProduct
+  return JSON.parse(JSON.stringify(product))
 }
 // GET RELATED PRODUCTS: PRODUCTS WITH SAME CATEGORY
 export async function getRelatedProductsByCategory({

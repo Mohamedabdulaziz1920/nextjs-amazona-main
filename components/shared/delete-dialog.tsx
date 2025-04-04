@@ -1,6 +1,5 @@
 'use client'
 import { useState, useTransition } from 'react'
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,6 +12,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { useTranslations } from 'next-intl'
 
 export default function DeleteDialog({
   id,
@@ -23,25 +23,25 @@ export default function DeleteDialog({
   action: (id: string) => Promise<{ success: boolean; message: string }>
   callbackAction?: () => void
 }) {
+  const t = useTranslations('DeleteDialog')
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button size='sm' variant='outline'>
-          Delete
+          {t('deleteButton')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+          <AlertDialogDescription>{t('description')}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancelButton')}</AlertDialogCancel>
 
           <Button
             variant='destructive'
@@ -65,7 +65,7 @@ export default function DeleteDialog({
               })
             }
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            {isPending ? t('deletingText') : t('confirmButton')}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

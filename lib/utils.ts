@@ -38,9 +38,13 @@ export const formatNumberWithDecimal = (num: number): string => {
 
 export const toSlug = (text: string): string =>
   text
-    .replace(/[^\w\s-\u0600-\u06FF]/g, '') // يُبقي العربية
-    .replace(/\s+/g, '-')
+    .toLowerCase()
+    .normalize('NFKD') // تفكيك الحروف العربية (مهم للبحث)
+    .replace(/[^\p{L}\p{N}\s-]/gu, '') // إزالة كل ما ليس حرفًا أو رقمًا أو مسافة/شرطة (يدعم Unicode)
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
     .trim()
+    .replace(/^-+|-+$/g, '')
 const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   style: 'currency',
