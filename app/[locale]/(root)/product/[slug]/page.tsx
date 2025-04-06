@@ -4,7 +4,6 @@ import {
   getProductBySlug,
   getRelatedProductsByCategory,
 } from '@/lib/actions/product.actions'
-
 import ReviewList from './review-list'
 import { generateId, round2 } from '@/lib/utils'
 import SelectVariant from '@/components/shared/product/select-variant'
@@ -17,12 +16,23 @@ import RatingSummary from '@/components/shared/product/rating-summary'
 import ProductSlider from '@/components/shared/product/product-slider'
 import { getTranslations } from 'next-intl/server'
 import AddToCartWithPlayerId from '@/components/shared/product/add-to-cart-with-player-id'
+import { Metadata } from 'next'
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug: string }>
-}) {
+interface PageProps {
+  params: { slug: string }
+  searchParams: {
+    page?: string
+    color?: string
+    size?: string
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
   const t = await getTranslations()
-  const params = await props.params
   const product = await getProductBySlug(params.slug)
   if (!product) {
     return { title: t('Product.Product not found') }
@@ -33,21 +43,16 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function ProductDetails(props: {
-  params: { slug: string }
-  searchParams: { page: string; color: string; size: string }
-}) {
-  const searchParams = await props.searchParams
-
+export default async function ProductDetails({
+  params,
+  searchParams,
+}: PageProps) {
   const { page, color, size } = searchParams
-
-  const params = await props.params
-
   const { slug } = params
 
   const session = await auth()
-
   const product = await getProductBySlug(slug)
+  const t = await getTranslations()
 
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
@@ -55,19 +60,18 @@ export default async function ProductDetails(props: {
     page: Number(page || '1'),
   })
 
-  const t = await getTranslations()
   return (
     <div>
       <AddToBrowsingHistory id={product._id} category={product.category} />
       <section>
-        <div className='grid grid-cols-1 md:grid-cols-5  '>
+        <div className='grid grid-cols-1 md:grid-cols-5'>
           <div className='col-span-2'>
             <ProductGallery images={product.images} />
           </div>
 
           <div className='flex w-full flex-col gap-2 md:p-5 col-span-2'>
             <div className='flex flex-col gap-3'>
-              <p className='p-medium-16 rounded-full bg-grey-500/10   text-grey-500'>
+              <p className='p-medium-16 rounded-full bg-grey-500/10 text-grey-500'>
                 {t('Product.Brand')} {product.brand} {product.category}
               </p>
               <h1 className='font-bold text-lg lg:text-xl'>{product.name}</h1>
