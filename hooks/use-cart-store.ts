@@ -38,8 +38,8 @@ const useCartStore = create(
         const { items, shippingAddress } = get().cart
 
         // التحقق من وجود playerId
-        if (item.playerId === undefined || item.playerId <= 0) {
-          throw new Error('Player ID is required and must be a positive number')
+        if (Number(item.playerId) <= 0) {
+          throw new Error('Player ID must be positive')
         }
 
         const existItem = items.find(

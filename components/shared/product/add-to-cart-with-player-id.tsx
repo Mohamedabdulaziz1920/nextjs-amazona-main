@@ -51,10 +51,11 @@ export default function AddToCartWithPlayerId({
           </Button>
         ),
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         variant: 'destructive',
-        description: err.message || t('Product.Add to Cart failed'),
+        description:
+          err instanceof Error ? err.message : t('Product.Add to Cart failed'),
       })
     }
   }

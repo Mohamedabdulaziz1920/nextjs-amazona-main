@@ -14,6 +14,7 @@ import Product from '../db/models/product.model'
 import User from '../db/models/user.model'
 import mongoose from 'mongoose'
 import { getSetting } from './setting.actions'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { z } from 'zod'
 
 // CREATE
