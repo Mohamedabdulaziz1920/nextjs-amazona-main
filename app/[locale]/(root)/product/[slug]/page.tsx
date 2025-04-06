@@ -18,51 +18,54 @@ import { getTranslations } from 'next-intl/server'
 import AddToCartWithPlayerId from '@/components/shared/product/add-to-cart-with-player-id'
 import { Metadata } from 'next'
 
-interface PageProps {
-  params: { slug: string; locale: string }
-  searchParams: {
+type Props = {
+  params: {
+    slug: string
+    locale: string
+  }
+  searchParams?: {
+    [key: string]: string | string[] | undefined
     page?: string
     color?: string
     size?: string
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations()
   const product = await getProductBySlug(params.slug)
+
   if (!product) {
     return { title: t('Product.Product not found') }
   }
+
   return {
     title: product.name,
     description: product.description,
   }
 }
 
-export default async function ProductDetails({
-  params,
-  searchParams,
-}: PageProps) {
-  const { page, color, size } = searchParams
-  const { slug } = params
+export default async function ProductDetails({ params, searchParams }: Props) {
+  const { page = '1', color, size } = searchParams || {}
+  const { slug, locale } = params
 
   const session = await auth()
   const product = await getProductBySlug(slug)
-  const t = await getTranslations()
+  const t = await getTranslations({ locale })
 
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
     productId: product._id,
-    page: Number(page || '1'),
+    page: Number(page),
   })
+
+  const selectedSize = size || product.sizes[0]
+  const selectedColor = color || product.colors[0]
 
   return (
     <div>
       <AddToBrowsingHistory id={product._id} category={product.category} />
+
       <section>
         <div className='grid grid-cols-1 md:grid-cols-5'>
           <div className='col-span-2'>
@@ -82,7 +85,9 @@ export default async function ProductDetails({
                 asPopover
                 ratingDistribution={product.ratingDistribution}
               />
+
               <Separator />
+
               <div className='flex flex-col gap-3 sm:flex-row sm:items-center'>
                 <div className='flex gap-3'>
                   <ProductPrice
@@ -94,14 +99,17 @@ export default async function ProductDetails({
                 </div>
               </div>
             </div>
+
             <div>
               <SelectVariant
                 product={product}
-                size={size || product.sizes[0]}
-                color={color || product.colors[0]}
+                size={selectedSize}
+                color={selectedColor}
               />
             </div>
+
             <Separator className='my-2' />
+
             <div className='flex flex-col gap-2'>
               <p className='p-bold-20 text-grey-600'>
                 {t('Product.Description')}:
@@ -111,6 +119,7 @@ export default async function ProductDetails({
               </p>
             </div>
           </div>
+
           <div>
             <Card>
               <CardContent className='p-4 flex flex-col gap-4'>
@@ -123,6 +132,7 @@ export default async function ProductDetails({
                     })}
                   </div>
                 )}
+
                 {product.countInStock !== 0 ? (
                   <div className='text-green-700 text-xl'>
                     {t('Product.In Stock')}
@@ -145,8 +155,8 @@ export default async function ProductDetails({
                       price: round2(product.price),
                       quantity: 1,
                       image: product.images[0],
-                      size: size || product.sizes[0],
-                      color: color || product.colors[0],
+                      size: selectedSize,
+                      color: selectedColor,
                     }}
                   />
                 )}
@@ -155,18 +165,21 @@ export default async function ProductDetails({
           </div>
         </div>
       </section>
+
       <section className='mt-10'>
         <h2 className='h2-bold mb-2' id='reviews'>
           {t('Product.Customer Reviews')}
         </h2>
         <ReviewList product={product} userId={session?.user.id} />
       </section>
+
       <section className='mt-10'>
         <ProductSlider
           products={relatedProducts.data}
           title={t('Product.Best Sellers in', { name: product.category })}
         />
       </section>
+
       <section>
         <BrowsingHistoryList className='mt-10' />
       </section>
