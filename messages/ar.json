@@ -34,6 +34,7 @@
     "Go to cart": "اذهب إلى السلة"
   },
   "Home": {
+    "Products Collection": "مجموعة المنتجات",
     "الملوك اون لاين": "الملوك اون لاين",
     "Categories to explore": "فئات للاستكشاف",
     "See More": "شاهد المزيد",
@@ -125,7 +126,17 @@
     "namePlaceholder": "أدخل اسم المنتج",
     "slug": "الرابط",
     "slugPlaceholder": "أدخل رابط المنتج",
-    "generate": "توليد"
+    "generate": "توليد",
+    "FailedToLoad": "فشل تحميل المنتج",
+    "NotFound": "المنتج غير موجود",
+    "OnlyXLeft": "بقي {count} فقط في المخزون - اطلب قريباً",
+    "InStock": "متوفر",
+    "OutOfStock": "غير متوفر",
+    "EnterPlayerId": "اكتب الـID الخاص بك:",
+    "PlayerId": "معرف اللاعب",
+    "Enter your Player ID (Number)": "اكتب الـID الخاص بك:",
+    "CustomerReviews": "تقييمات العملاء",
+    "BestSellersIn": "الأكثر مبيعاً في {name}"
   },
   "ProductList": {
     "products": "المنتجات",

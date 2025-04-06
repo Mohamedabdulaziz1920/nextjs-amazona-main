@@ -34,6 +34,7 @@
     "Go to cart": "Go to cart"
   },
   "Home": {
+    "Products Collection": "Products Collection",
     "Categories to explore": "Categories to explore",
     "See More": "See More",
     "Explore New Arrivals": "Explore New Arrivals",
@@ -124,7 +125,16 @@
     "namePlaceholder": "Enter product name",
     "slug": "Slug",
     "slugPlaceholder": "Enter product slug",
-    "generate": "Generate"
+    "generate": "Generate",
+    "FailedToLoad": "Failed to load product",
+    "NotFound": "Product not found",
+    "OnlyXLeft": "Only {count} left in stock - order soon",
+    "InStock": "In Stock",
+    "OutOfStock": "Out of Stock",
+    "EnterPlayerId": "Enter your Player ID (Number)",
+    "PlayerId": "Player ID",
+    "CustomerReviews": "Customer Reviews",
+    "BestSellersIn": "Best Sellers in {name}"
   },
   "ProductList": {
     "products": "Products",

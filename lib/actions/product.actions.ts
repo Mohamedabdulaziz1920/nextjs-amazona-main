@@ -29,7 +29,17 @@ export async function createProduct(data: IProductInput) {
     }
   }
 }
-
+export async function getAllProductsSortedByDate() {
+  try {
+    const products = await Product.find()
+      .sort({ createdAt: 1 }) // 1 للترتيب التصاعدي
+      .limit(50) // يمكنك زيادة العدد حسب الحاجة
+    return JSON.parse(JSON.stringify(products))
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    return []
+  }
+}
 // UPDATE
 export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
   const t = await getTranslations('products')
@@ -71,6 +81,9 @@ export async function deleteProduct(id: string) {
     }
   }
 }
+// اجلب جميع المنتجات
+// استبدال الدالة الحالية بهذه النسخة المحسنة
+
 // GET ONE PRODUCT BY ID
 export async function getProductById(productId: string) {
   await connectToDatabase()
@@ -234,25 +247,28 @@ export async function getRelatedProductsByCategory({
 }
 
 // GET ALL PRODUCTS
+// استبدال الدالتين المكررتين بهذه الدالة الموحدة
 export async function getAllProducts({
-  query,
+  query = '',
   limit,
-  page,
-  category,
-  tag,
-  price,
-  rating,
-  sort,
+  page = 1,
+  category = '',
+  tag = '',
+  price = '',
+  rating = '',
+  sort = '',
+  isPublished = true,
 }: {
-  query: string
-  category: string
-  tag: string
+  query?: string
   limit?: number
-  page: number
+  page?: number
+  category?: string
+  tag?: string
   price?: string
   rating?: string
   sort?: string
-}) {
+  isPublished?: boolean
+} = {}) {
   const {
     common: { pageSize },
   } = await getSetting()
@@ -270,7 +286,6 @@ export async function getAllProducts({
       : {}
   const categoryFilter = category && category !== 'all' ? { category } : {}
   const tagFilter = tag && tag !== 'all' ? { tags: tag } : {}
-
   const ratingFilter =
     rating && rating !== 'all'
       ? {
@@ -279,7 +294,6 @@ export async function getAllProducts({
           },
         }
       : {}
-  // 10-50
   const priceFilter =
     price && price !== 'all'
       ? {
@@ -299,27 +313,24 @@ export async function getAllProducts({
           : sort === 'avg-customer-review'
             ? { avgRating: -1 }
             : { _id: -1 }
-  const isPublished = { isPublished: true }
-  const products = await Product.find({
-    ...isPublished,
+
+  const conditions = {
+    ...(isPublished && { isPublished: true }),
     ...queryFilter,
     ...tagFilter,
     ...categoryFilter,
     ...priceFilter,
     ...ratingFilter,
-  })
+  }
+
+  const products = await Product.find(conditions)
     .sort(order)
     .skip(limit * (Number(page) - 1))
     .limit(limit)
     .lean()
 
-  const countProducts = await Product.countDocuments({
-    ...queryFilter,
-    ...tagFilter,
-    ...categoryFilter,
-    ...priceFilter,
-    ...ratingFilter,
-  })
+  const countProducts = await Product.countDocuments(conditions)
+
   return {
     products: JSON.parse(JSON.stringify(products)) as IProduct[],
     totalPages: Math.ceil(countProducts / limit),
@@ -328,7 +339,31 @@ export async function getAllProducts({
     to: limit * (Number(page) - 1) + products.length,
   }
 }
+// أضف هذه الدالة للحصول على المنتجات مصنفة حسب الفئة
+export async function getProductsGroupedByCategory() {
+  await connectToDatabase()
 
+  const categories = await Product.distinct('category')
+  const result = []
+
+  for (const category of categories) {
+    const products = await Product.find({
+      category,
+      isPublished: true,
+    })
+      .limit(100)
+      .lean() // 5 منتجات لكل فئة
+
+    if (products.length > 0) {
+      result.push({
+        category,
+        products: JSON.parse(JSON.stringify(products)),
+      })
+    }
+  }
+
+  return result
+}
 export async function getAllTags() {
   const tags = await Product.aggregate([
     { $unwind: '$tags' },

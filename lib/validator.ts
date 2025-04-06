@@ -73,6 +73,10 @@ export const OrderItemSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
   category: z.string().min(1, 'Category is required'),
+  playerId: z
+    .string()
+    .min(1, 'Player ID is required')
+    .regex(/^[a-zA-Z0-9]+$/, 'Must contain only letters and numbers'),
   quantity: z
     .number()
     .int()
@@ -147,6 +151,7 @@ export const CartSchema = z.object({
   shippingAddress: z.optional(ShippingAddressSchema),
   deliveryDateIndex: z.optional(z.number()),
   expectedDeliveryDate: z.optional(z.date()),
+  playerId: z.string().optional(),
 })
 
 // USER

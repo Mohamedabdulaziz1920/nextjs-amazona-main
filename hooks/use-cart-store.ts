@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
 import { Cart, OrderItem, ShippingAddress } from '@/types'
 import { calcDeliveryDateAndPrice } from '@/lib/actions/order.actions'
 
@@ -32,12 +31,23 @@ const useCartStore = create(
       cart: initialState,
 
       addItem: async (item: OrderItem, quantity: number) => {
+        // التحقق من صحة playerId
+        if (!item.playerId || !/^[a-zA-Z0-9]+$/.test(item.playerId)) {
+          throw new Error('Player ID must contain only letters and numbers')
+        }
         const { items, shippingAddress } = get().cart
+
+        // التحقق من وجود playerId
+        if (item.playerId === undefined || item.playerId <= 0) {
+          throw new Error('Player ID is required and must be a positive number')
+        }
+
         const existItem = items.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
-            x.size === item.size
+            x.size === item.size &&
+            x.playerId === item.playerId // المقارنة بـ playerId
         )
 
         if (existItem) {
@@ -45,7 +55,7 @@ const useCartStore = create(
             throw new Error('Not enough items in stock')
           }
         } else {
-          if (item.countInStock < item.quantity) {
+          if (item.countInStock < quantity) {
             throw new Error('Not enough items in stock')
           }
         }
@@ -54,7 +64,8 @@ const useCartStore = create(
           ? items.map((x) =>
               x.product === item.product &&
               x.color === item.color &&
-              x.size === item.size
+              x.size === item.size &&
+              x.playerId === item.playerId
                 ? { ...existItem, quantity: existItem.quantity + quantity }
                 : x
             )
@@ -70,33 +81,41 @@ const useCartStore = create(
             })),
           },
         })
+
         const foundItem = updatedCartItems.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
-            x.size === item.size
+            x.size === item.size &&
+            x.playerId === item.playerId
         )
+
         if (!foundItem) {
           throw new Error('Item not found in cart')
         }
         return foundItem.clientId
       },
+
       updateItem: async (item: OrderItem, quantity: number) => {
         const { items, shippingAddress } = get().cart
         const exist = items.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
-            x.size === item.size
+            x.size === item.size &&
+            x.playerId === item.playerId
         )
         if (!exist) return
+
         const updatedCartItems = items.map((x) =>
           x.product === item.product &&
           x.color === item.color &&
-          x.size === item.size
-            ? { ...exist, quantity: quantity }
+          x.size === item.size &&
+          x.playerId === item.playerId
+            ? { ...exist, quantity }
             : x
         )
+
         set({
           cart: {
             ...get().cart,
@@ -108,13 +127,15 @@ const useCartStore = create(
           },
         })
       },
+
       removeItem: async (item: OrderItem) => {
         const { items, shippingAddress } = get().cart
         const updatedCartItems = items.filter(
           (x) =>
             x.product !== item.product ||
             x.color !== item.color ||
-            x.size !== item.size
+            x.size !== item.size ||
+            x.playerId !== item.playerId
         )
         set({
           cart: {
@@ -127,6 +148,8 @@ const useCartStore = create(
           },
         })
       },
+
+      // ... باقي الدوال (تبقى كما هي بدون تغيير)
       setShippingAddress: async (shippingAddress: ShippingAddress) => {
         const { items } = get().cart
         set({
@@ -140,6 +163,7 @@ const useCartStore = create(
           },
         })
       },
+
       setPaymentMethod: (paymentMethod: string) => {
         set({
           cart: {
@@ -148,9 +172,9 @@ const useCartStore = create(
           },
         })
       },
+
       setDeliveryDateIndex: async (index: number) => {
         const { items, shippingAddress } = get().cart
-
         set({
           cart: {
             ...get().cart,
@@ -162,6 +186,7 @@ const useCartStore = create(
           },
         })
       },
+
       clearCart: () => {
         set({
           cart: {
@@ -170,12 +195,13 @@ const useCartStore = create(
           },
         })
       },
+
       init: () => set({ cart: initialState }),
     }),
-
     {
       name: 'cart-store',
     }
   )
 )
+
 export default useCartStore

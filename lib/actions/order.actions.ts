@@ -14,6 +14,7 @@ import Product from '../db/models/product.model'
 import User from '../db/models/user.model'
 import mongoose from 'mongoose'
 import { getSetting } from './setting.actions'
+import { z } from 'zod'
 
 // CREATE
 export const createOrder = async (clientSideCart: Cart) => {
@@ -21,7 +22,15 @@ export const createOrder = async (clientSideCart: Cart) => {
     await connectToDatabase()
     const session = await auth()
     if (!session) throw new Error('User not authenticated')
-    // recalculate price and delivery date on the server
+
+    // التحقق من أن جميع العناصر تحتوي على playerId صالح
+    const hasInvalidItems = clientSideCart.items.some(
+      (item) => !item.playerId || isNaN(Number(item.playerId))
+    )
+    if (hasInvalidItems) {
+      throw new Error('All items must have a valid Player ID')
+    }
+
     const createdOrder = await createOrderFromCart(
       clientSideCart,
       session.user.id!
@@ -35,22 +44,36 @@ export const createOrder = async (clientSideCart: Cart) => {
     return { success: false, message: formatError(error) }
   }
 }
+
+// في دالة createOrderFromCart
 export const createOrderFromCart = async (
   clientSideCart: Cart,
   userId: string
 ) => {
+  // التحقق من صحة playerId لكل عنصر (كstring)
+  const hasInvalidItems = clientSideCart.items.some(
+    (item) => !item.playerId || typeof item.playerId !== 'string'
+  )
+
+  if (hasInvalidItems) {
+    throw new Error('All items must have a valid Player ID')
+  }
+
   const cart = {
     ...clientSideCart,
-    ...calcDeliveryDateAndPrice({
+    ...(await calcDeliveryDateAndPrice({
       items: clientSideCart.items,
       shippingAddress: clientSideCart.shippingAddress,
       deliveryDateIndex: clientSideCart.deliveryDateIndex,
-    }),
+    })),
   }
 
   const order = OrderInputSchema.parse({
     user: userId,
-    items: cart.items,
+    items: cart.items.map((item) => ({
+      ...item,
+      playerId: item.playerId, // نبقيه كstring دون تحويل لرقم
+    })),
     shippingAddress: cart.shippingAddress,
     paymentMethod: cart.paymentMethod,
     itemsPrice: cart.itemsPrice,
@@ -82,6 +105,7 @@ export async function updateOrderToPaid(orderId: string) {
     return { success: false, message: formatError(err) }
   }
 }
+
 const updateProductStock = async (orderId: string) => {
   const session = await mongoose.connection.startSession()
 
@@ -100,6 +124,9 @@ const updateProductStock = async (orderId: string) => {
       const product = await Product.findById(item.product).session(session)
       if (!product) throw new Error('Product not found')
 
+      // تسجيل عملية الشراء مع playerId
+      console.log(`Product ${product._id} purchased by player ${item.playerId}`)
+
       product.countInStock -= item.quantity
       await Product.updateOne(
         { _id: product._id },
@@ -116,6 +143,7 @@ const updateProductStock = async (orderId: string) => {
     throw error
   }
 }
+
 export async function deliverOrder(orderId: string) {
   try {
     await connectToDatabase()
@@ -151,8 +179,7 @@ export async function deleteOrder(id: string) {
   }
 }
 
-// GET ALL ORDERS
-
+// GET ORDERS
 export async function getAllOrders({
   limit,
   page,
@@ -177,6 +204,7 @@ export async function getAllOrders({
     totalPages: Math.ceil(ordersCount / limit),
   }
 }
+
 export async function getMyOrders({
   limit,
   page,
@@ -207,12 +235,44 @@ export async function getMyOrders({
     totalPages: Math.ceil(ordersCount / limit),
   }
 }
+
+// NEW: Get orders by player ID
+export async function getOrdersByPlayerId(
+  playerId: string, // تغيير من number إلى string
+  { limit, page }: { limit?: number; page: number }
+) {
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  limit = limit || pageSize
+  await connectToDatabase()
+  const skipAmount = (Number(page) - 1) * limit
+
+  const orders = await Order.find({
+    'items.playerId': playerId,
+  })
+    .sort({ createdAt: 'desc' })
+    .skip(skipAmount)
+    .limit(limit)
+
+  const ordersCount = await Order.countDocuments({
+    'items.playerId': playerId,
+  })
+
+  return {
+    data: JSON.parse(JSON.stringify(orders)),
+    totalPages: Math.ceil(ordersCount / limit),
+  }
+}
+
 export async function getOrderById(orderId: string): Promise<IOrder> {
   await connectToDatabase()
   const order = await Order.findById(orderId)
+  if (!order) throw new Error('Order not found')
   return JSON.parse(JSON.stringify(order))
 }
 
+// PAYMENT METHODS
 export async function createPayPalOrder(orderId: string) {
   await connectToDatabase()
   try {
@@ -276,6 +336,7 @@ export async function approvePayPalOrder(
   }
 }
 
+// CALCULATIONS
 export const calcDeliveryDateAndPrice = async ({
   items,
   shippingAddress,
@@ -323,7 +384,7 @@ export const calcDeliveryDateAndPrice = async ({
   }
 }
 
-// GET ORDERS BY USER
+// ANALYTICS
 export async function getOrderSummary(date: DateRange) {
   await connectToDatabase()
 
@@ -392,7 +453,6 @@ export async function getOrderSummary(date: DateRange) {
         value: '$totalSales',
       },
     },
-
     { $sort: { label: -1 } },
   ])
   const topSalesCategories = await getTopSalesCategories(date)
@@ -416,6 +476,50 @@ export async function getOrderSummary(date: DateRange) {
     topSalesCategories: JSON.parse(JSON.stringify(topSalesCategories)),
     topSalesProducts: JSON.parse(JSON.stringify(topSalesProducts)),
     latestOrders: JSON.parse(JSON.stringify(latestOrders)) as IOrderList[],
+  }
+}
+
+// NEW: Get player statistics
+export async function getPlayerStatistics(playerId: number) {
+  await connectToDatabase()
+
+  const totalOrders = await Order.countDocuments({
+    'items.playerId': playerId,
+  })
+
+  const totalSpent = await Order.aggregate([
+    {
+      $match: {
+        'items.playerId': playerId,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: '$totalPrice' },
+      },
+    },
+  ])
+
+  const favoriteProducts = await Order.aggregate([
+    { $match: { 'items.playerId': playerId } },
+    { $unwind: '$items' },
+    { $match: { 'items.playerId': playerId } },
+    {
+      $group: {
+        _id: '$items.product',
+        name: { $first: '$items.name' },
+        count: { $sum: '$items.quantity' },
+      },
+    },
+    { $sort: { count: -1 } },
+    { $limit: 3 },
+  ])
+
+  return {
+    totalOrders,
+    totalSpent: totalSpent[0]?.total || 0,
+    favoriteProducts: JSON.parse(JSON.stringify(favoriteProducts)),
   }
 }
 
@@ -470,30 +574,21 @@ async function getTopSalesProducts(date: DateRange) {
         },
       },
     },
-    // Step 1: Unwind orderItems array
     { $unwind: '$items' },
-
-    // Step 2: Group by productId to calculate total sales per product
     {
       $group: {
         _id: {
           name: '$items.name',
           image: '$items.image',
           _id: '$items.product',
+          playerId: '$items.playerId',
         },
         totalSales: {
           $sum: { $multiply: ['$items.quantity', '$items.price'] },
-        }, // Assume quantity field in orderItems represents units sold
+        },
+        totalPlayers: { $addToSet: '$items.playerId' },
       },
     },
-    {
-      $sort: {
-        totalSales: -1,
-      },
-    },
-    { $limit: 6 },
-
-    // Step 3: Replace productInfo array with product name and format the output
     {
       $project: {
         _id: 0,
@@ -501,11 +596,11 @@ async function getTopSalesProducts(date: DateRange) {
         label: '$_id.name',
         image: '$_id.image',
         value: '$totalSales',
+        uniquePlayers: { $size: '$totalPlayers' },
       },
     },
-
-    // Step 4: Sort by totalSales in descending order
-    { $sort: { _id: 1 } },
+    { $sort: { value: -1 } },
+    { $limit: 6 },
   ])
 
   return result
@@ -521,18 +616,14 @@ async function getTopSalesCategories(date: DateRange, limit = 5) {
         },
       },
     },
-    // Step 1: Unwind orderItems array
     { $unwind: '$items' },
-    // Step 2: Group by productId to calculate total sales per product
     {
       $group: {
         _id: '$items.category',
-        totalSales: { $sum: '$items.quantity' }, // Assume quantity field in orderItems represents units sold
+        totalSales: { $sum: '$items.quantity' },
       },
     },
-    // Step 3: Sort by totalSales in descending order
     { $sort: { totalSales: -1 } },
-    // Step 4: Limit to top N products
     { $limit: limit },
   ])
 

@@ -31,6 +31,7 @@ const orderSchema = new Schema<IOrder>(
         quantity: { type: Number, required: true },
         size: { type: String },
         color: { type: String },
+        playerId: { type: Number, required: true }, // الحقل الجديد المطلوب
       },
     ],
     shippingAddress: {
@@ -53,7 +54,6 @@ const orderSchema = new Schema<IOrder>(
     paidAt: { type: Date },
     isDelivered: { type: Boolean, required: true, default: false },
     deliveredAt: { type: Date },
-    createdAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,

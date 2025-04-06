@@ -8,12 +8,14 @@ import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import { getSetting } from '@/lib/actions/setting.actions'
 import { cookies } from 'next/headers'
+import { SessionProvider } from 'next-auth/react'
+import { auth } from '@/auth'
 
 // إعداد خط Cairo للعربية
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
   weight: ['400', '500', '700'],
-  variable: '--font-Cairo',
+  variable: '--font-cairo',
 })
 
 // إعداد خط Roboto للإنجليزية
@@ -22,6 +24,7 @@ const roboto = Roboto({
   weight: ['400', '500', '700'],
   variable: '--font-roboto',
 })
+
 export async function generateMetadata() {
   const {
     site: { slogan, name, description, url },
@@ -36,7 +39,7 @@ export async function generateMetadata() {
   }
 }
 
-export default async function AppLayout({
+export default async function RootLayout({
   params,
   children,
 }: {
@@ -44,32 +47,33 @@ export default async function AppLayout({
   children: React.ReactNode
 }) {
   const setting = await getSetting()
-  const currencyCookie = (await cookies()).get('currency')
+  const currencyCookie = cookies().get('currency')
   const currency = currencyCookie ? currencyCookie.value : 'USD'
+  const { locale } = params
+  const session = await auth()
 
-  const { locale } = await params
-  // Ensure that the incoming `locale` is valid
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!routing.locales.includes(locale as any)) {
+  // التحقق من صحة اللغة
+  if (!routing.locales.includes(locale)) {
     notFound()
   }
+
   const messages = await getMessages()
 
   return (
-    <html
-      lang={locale}
-      dir={getDirection(locale) === 'rtl' ? 'rtl' : 'ltr'}
-      suppressHydrationWarning
-    >
+    <html lang={locale} dir={getDirection(locale)} suppressHydrationWarning>
       <body
-        dir={getDirection(locale) === 'rtl' ? 'rtl' : 'ltr'}
+        className={`${locale === 'ar' ? cairo.variable : roboto.variable} ${
+          locale === 'ar' ? 'font-sans-ar' : 'font-sans-en'
+        }`}
+        dir={getDirection(locale)}
         suppressHydrationWarning
-        className={`${locale === 'ar' ? cairo.variable : roboto.variable}`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClientProviders setting={{ ...setting, currency }}>
-            {children}
-          </ClientProviders>
+          <SessionProvider session={session}>
+            <ClientProviders setting={{ ...setting, currency }}>
+              {children}
+            </ClientProviders>
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>
