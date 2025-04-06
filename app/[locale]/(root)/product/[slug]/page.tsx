@@ -19,7 +19,7 @@ import AddToCartWithPlayerId from '@/components/shared/product/add-to-cart-with-
 import { Metadata } from 'next'
 
 interface PageProps {
-  params: { slug: string }
+  params: { slug: string; locale: string }
   searchParams: {
     page?: string
     color?: string
