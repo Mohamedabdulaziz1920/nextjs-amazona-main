@@ -18,12 +18,22 @@ import ProductSlider from '@/components/shared/product/product-slider'
 import { getTranslations } from 'next-intl/server'
 import AddToCartWithPlayerId from '@/components/shared/product/add-to-cart-with-player-id'
 
-// ✅ استخدم النوع الرسمي لتوقيع الدالة
+type PageProps = {
+  params: {
+    slug: string
+    locale: string
+  }
+  searchParams?: {
+    [key: string]: string | string[] | undefined
+    page?: string
+    color?: string
+    size?: string
+  }
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string; locale: string }
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const t = await getTranslations()
   const product = await getProductBySlug(params.slug)
 
@@ -40,15 +50,7 @@ export async function generateMetadata({
 export default async function ProductDetails({
   params,
   searchParams,
-}: {
-  params: { slug: string; locale: string }
-  searchParams?: {
-    [key: string]: string | string[] | undefined
-    page?: string
-    color?: string
-    size?: string
-  }
-}) {
+}: PageProps) {
   const { page = '1', color, size } = searchParams || {}
   const { slug, locale } = params
 

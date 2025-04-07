@@ -51,6 +51,7 @@
     "Best Deals on Wrist Watches": "Best Deals on Wrist Watches"
   },
   "Product": {
+    "Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
     "FilterName": "Filter name...",
     "Loading": "Loading...",
     "No results": "No results",
@@ -542,6 +543,8 @@
     "Cancel": "Cancel"
   },
   "products": {
+    "player id": "player-id",
+    "Enter your player ID": "Enter your player ID",
     "createSuccess": "Product created successfully",
     "updateSuccess": "Product updated successfully",
     "deleteSuccess": "Product deleted successfully",

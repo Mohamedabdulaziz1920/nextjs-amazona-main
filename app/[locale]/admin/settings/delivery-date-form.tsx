@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -17,7 +19,7 @@ import {
 } from '@/components/ui/select'
 import { ISettingInput } from '@/types'
 import { TrashIcon } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useFieldArray, UseFormReturn } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
 
@@ -40,15 +42,23 @@ export default function DeliveryDateForm({
     formState: { errors },
   } = form
 
-  const availableDeliveryDates = watch('availableDeliveryDates')
-  const defaultDeliveryDate = watch('defaultDeliveryDate')
+  const [availableDeliveryDates, defaultDeliveryDate] = watch([
+    'availableDeliveryDates',
+    'defaultDeliveryDate',
+  ])
 
+  // استخراج أسماء التواريخ المتاحة باستخدام useMemo لتحسين الأداء
+  const deliveryDateNames = useMemo(
+    () => availableDeliveryDates.map((date) => date.name),
+    [availableDeliveryDates]
+  )
+
+  // إصلاح useEffect مع التعامل الصحيح مع التبعيات
   useEffect(() => {
-    const validCodes = availableDeliveryDates.map((lang) => lang.name)
-    if (!validCodes.includes(defaultDeliveryDate)) {
+    if (!deliveryDateNames.includes(defaultDeliveryDate)) {
       setValue('defaultDeliveryDate', '')
     }
-  }, [JSON.stringify(availableDeliveryDates)])
+  }, [deliveryDateNames, defaultDeliveryDate, setValue])
 
   return (
     <Card id={id}>
@@ -58,13 +68,13 @@ export default function DeliveryDateForm({
       <CardContent className='space-y-4'>
         <div className='space-y-4'>
           {fields.map((field, index) => (
-            <div key={field.id} className='flex gap-2'>
+            <div key={field.id} className='flex gap-2 items-start'>
               <FormField
                 control={form.control}
                 name={`availableDeliveryDates.${index}.name`}
                 render={({ field }) => (
-                  <FormItem>
-                    {index == 0 && <FormLabel>{t('name')}</FormLabel>}
+                  <FormItem className='flex-1'>
+                    {index === 0 && <FormLabel>{t('name')}</FormLabel>}
                     <FormControl>
                       <Input {...field} placeholder={t('name')} />
                     </FormControl>
@@ -78,10 +88,15 @@ export default function DeliveryDateForm({
                 control={form.control}
                 name={`availableDeliveryDates.${index}.daysToDeliver`}
                 render={({ field }) => (
-                  <FormItem>
-                    {index == 0 && <FormLabel>{t('days')}</FormLabel>}
+                  <FormItem className='w-24'>
+                    {index === 0 && <FormLabel>{t('days')}</FormLabel>}
                     <FormControl>
-                      <Input {...field} placeholder={t('daysToDeliver')} />
+                      <Input
+                        {...field}
+                        type='number'
+                        placeholder={t('daysToDeliver')}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage>
                       {
@@ -96,10 +111,15 @@ export default function DeliveryDateForm({
                 control={form.control}
                 name={`availableDeliveryDates.${index}.shippingPrice`}
                 render={({ field }) => (
-                  <FormItem>
-                    {index == 0 && <FormLabel>{t('shippingPrice')}</FormLabel>}
+                  <FormItem className='w-24'>
+                    {index === 0 && <FormLabel>{t('shippingPrice')}</FormLabel>}
                     <FormControl>
-                      <Input {...field} placeholder={t('shippingPrice')} />
+                      <Input
+                        {...field}
+                        type='number'
+                        placeholder={t('shippingPrice')}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
                     </FormControl>
                     <FormMessage>
                       {
@@ -114,12 +134,14 @@ export default function DeliveryDateForm({
                 control={form.control}
                 name={`availableDeliveryDates.${index}.freeShippingMinPrice`}
                 render={({ field }) => (
-                  <FormItem>
-                    {index == 0 && <FormLabel>{t('freeShipping')}</FormLabel>}
+                  <FormItem className='w-24'>
+                    {index === 0 && <FormLabel>{t('freeShipping')}</FormLabel>}
                     <FormControl>
                       <Input
                         {...field}
+                        type='number'
                         placeholder={t('freeShippingMinPrice')}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage>
@@ -131,16 +153,13 @@ export default function DeliveryDateForm({
                   </FormItem>
                 )}
               />
-              <div>
-                {index == 0 && <div className=''>{t('action')}</div>}
+              <div className='pt-7'>
                 <Button
                   type='button'
                   disabled={fields.length === 1}
                   variant='outline'
-                  className={index == 0 ? 'mt-2' : ''}
-                  onClick={() => {
-                    remove(index)
-                  }}
+                  size='icon'
+                  onClick={() => remove(index)}
                 >
                   <TrashIcon className='w-4 h-4' />
                 </Button>
@@ -150,7 +169,7 @@ export default function DeliveryDateForm({
 
           <Button
             type='button'
-            variant={'outline'}
+            variant='outline'
             onClick={() =>
               append({
                 name: '',
@@ -164,35 +183,36 @@ export default function DeliveryDateForm({
           </Button>
         </div>
 
-        <FormField
-          control={control}
-          name='defaultDeliveryDate'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('defaultDeliveryDate')}</FormLabel>
-              <FormControl>
+        {availableDeliveryDates.some((date) => date.name) && (
+          <FormField
+            control={control}
+            name='defaultDeliveryDate'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('defaultDeliveryDate')}</FormLabel>
                 <Select
                   value={field.value || ''}
-                  onValueChange={(value) => field.onChange(value)}
+                  onValueChange={field.onChange}
+                  disabled={!availableDeliveryDates.some((date) => date.name)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t('selectDeliveryDate')} />
                   </SelectTrigger>
                   <SelectContent>
                     {availableDeliveryDates
-                      .filter((x) => x.name)
-                      .map((lang, index) => (
-                        <SelectItem key={index} value={lang.name}>
-                          {lang.name} ({lang.name})
+                      .filter((date) => date.name)
+                      .map((date, index) => (
+                        <SelectItem key={index} value={date.name}>
+                          {date.name} ({date.daysToDeliver} {t('days')})
                         </SelectItem>
                       ))}
                   </SelectContent>
                 </Select>
-              </FormControl>
-              <FormMessage>{errors.defaultDeliveryDate?.message}</FormMessage>
-            </FormItem>
-          )}
-        />
+                <FormMessage>{errors.defaultDeliveryDate?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
+        )}
       </CardContent>
     </Card>
   )
