@@ -2,20 +2,26 @@
 
 ## Install Packages
 
+```bash
 npx shadcn@latest add scroll-area
-
-## update lib/utils.ts
-
-```ts
--// non-whitespace, non-hyphen characters, replace whitespace, trim leading hyphens and trim trailing hyphens
-// non-whitespace, non-hyphen characters, replace whitespace, trim leading hyphens and trim trailing hyphens.
-// Also replace repeated hyphens in middle with single hyphen
-    .replace(/-+/g, '-')
 ```
 
-## create components/shared/cart-sidebar.tsx
+## Update lib/utils.ts
 
 ```ts
+// تحسين دالة toSlug لإزالة الشرطات المتكررة في المنتصف
+export const toSlug = (text: string): string =>
+  text
+    .toLowerCase()
+    .replace(/[^\w\s-]+/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-') // إزالة الشرطات المتكررة
+    .replace(/^-+|-+$/g, '')
+```
+
+## Create components/shared/cart-sidebar.tsx
+
+```tsx
 import useCartStore from '@/hooks/use-cart-store'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -35,6 +41,7 @@ import { TrashIcon } from 'lucide-react'
 import ProductPrice from './product/product-price'
 import { FREE_SHIPPING_MIN_PRICE } from '@/lib/constants'
 
+// مكون الشريط الجانبي لعرض سلة التسوق
 export default function CartSidebar() {
   const {
     cart: { items, itemsPrice },
@@ -69,7 +76,7 @@ export default function CartSidebar() {
             <Separator className='mt-3' />
           </div>
 
-          <ScrollArea className='flex-1  w-full'>
+          <ScrollArea className='flex-1 w-full'>
             {items.map((item) => (
               <div key={item.clientId}>
                 <div className='my-3'>
@@ -129,11 +136,12 @@ export default function CartSidebar() {
 }
 ```
 
-## create hooks/use-device-type.ts
+## Create hooks/use-device-type.ts
 
 ```ts
 import { useState, useEffect } from 'react'
 
+// هوك للكشف عن نوع الجهاز
 function useDeviceType() {
   const [deviceType, setDeviceType] = useState('unknown')
 
@@ -142,7 +150,7 @@ function useDeviceType() {
       setDeviceType(window.innerWidth <= 768 ? 'mobile' : 'desktop')
     }
 
-    handleResize() // Set initial value
+    handleResize() // تعيين القيمة الأولية
     window.addEventListener('resize', handleResize)
 
     return () => window.removeEventListener('resize', handleResize)
@@ -154,17 +162,20 @@ function useDeviceType() {
 export default useDeviceType
 ```
 
-## create hooks/use-cart-sidebar.ts
+## Create hooks/use-cart-sidebar.ts
 
 ```ts
 import { usePathname } from 'next/navigation'
 import useDeviceType from './use-device-type'
 import useCartStore from './use-cart-store'
 
+// التحقق من المسارات التي لا يجب عرض الشريط الجانبي فيها
 const isNotInPaths = (s: string) =>
   !/^\/$|^\/cart$|^\/checkout$|^\/sign-in$|^\/sign-up$|^\/order(\/.*)?$|^\/account(\/.*)?$|^\/admin(\/.*)?$/.test(
     s
   )
+
+// هوك لإدارة حالة الشريط الجانبي لسلة التسوق
 function useCartSidebar() {
   const {
     cart: { items },
@@ -180,9 +191,9 @@ function useCartSidebar() {
 export default useCartSidebar
 ```
 
-## update components/shared/header/cart-button.tsx
+## Update components/shared/header/cart-button.tsx
 
-```ts
+```tsx
 import useCartSidebar from '@/hooks/use-cart-sidebar'
 const isCartSidebarOpen = useCartSidebar()
 {
@@ -194,15 +205,16 @@ const isCartSidebarOpen = useCartSidebar()
 }
 ```
 
-## create components/shared/client-providers.tsx
+## Create components/shared/client-providers.tsx
 
-```ts
+```tsx
 'use client'
 import React from 'react'
 import useCartSidebar from '@/hooks/use-cart-sidebar'
 import CartSidebar from './cart-sidebar'
 import { Toaster } from '../ui/toaster'
 
+// مقدم الخدمات للعميل (لإدارة الحالة على جانب العميل)
 export default function ClientProviders({
   children,
 }: {
@@ -226,16 +238,38 @@ export default function ClientProviders({
 }
 ```
 
-## update app/layout.tsx
+## Update app/layout.tsx
 
-```ts
+```tsx
 import ClientProviders from '@/components/shared/client-providers'
--        {children}
-        <ClientProviders>{children}</ClientProviders>
+// استبدال
+{
+  children
+}
+// بـ
+;<ClientProviders>{children}</ClientProviders>
 ```
 
-## npm run build
+## Build and Deploy
 
-## commit changes and push to GitHub
+```bash
+npm run build
+git add .
+git commit -m "Add cart sidebar functionality"
+git push
+```
 
-## go to https://nextjs-amazona.vercel.app
+## View the changes
+
+go to https://nextjs-amazona.vercel.app
+
+لقد قمت بتنفيذ الشريط الجانبي لسلة التسوق مع:
+
+1. عرض مصغر لعناصر السلة
+2. إمكانية تحديث الكمية أو حذف العناصر
+3. عرض المجموع الفرعي
+4. التحقق من أهلية الشحن المجاني
+5. تكامل مع زر السلة في الهيدر
+6. تفعيل الشريط فقط على أجهزة الكمبيوتر
+7. إخفاء الشريط في صفحات معينة (مثل صفحة الدفع)
+8. تحسينات تجربة المستخدم مع تأثيرات مرئية

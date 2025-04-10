@@ -59,6 +59,7 @@ export type IOrderList = IOrderInput & {
     name: string
     email: string
   }
+  playerId: string // إضافة حقل playerId هنا
   createdAt: Date
 }
 export type OrderItem = z.infer<typeof OrderItemSchema>

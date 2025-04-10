@@ -43,11 +43,7 @@ const useCartStore = create(
         }
 
         const existItem = items.find(
-          (x) =>
-            x.product === item.product &&
-            x.color === item.color &&
-            x.size === item.size &&
-            x.playerId === item.playerId // المقارنة بـ playerId
+          (x) => x.product === item.product && x.playerId === item.playerId // المقارنة بـ playerId
         )
 
         if (existItem) {
@@ -62,10 +58,7 @@ const useCartStore = create(
 
         const updatedCartItems = existItem
           ? items.map((x) =>
-              x.product === item.product &&
-              x.color === item.color &&
-              x.size === item.size &&
-              x.playerId === item.playerId
+              x.product === item.product && x.playerId === item.playerId
                 ? { ...existItem, quantity: existItem.quantity + quantity }
                 : x
             )
@@ -83,11 +76,7 @@ const useCartStore = create(
         })
 
         const foundItem = updatedCartItems.find(
-          (x) =>
-            x.product === item.product &&
-            x.color === item.color &&
-            x.size === item.size &&
-            x.playerId === item.playerId
+          (x) => x.product === item.product && x.playerId === item.playerId
         )
 
         if (!foundItem) {
@@ -99,19 +88,12 @@ const useCartStore = create(
       updateItem: async (item: OrderItem, quantity: number) => {
         const { items, shippingAddress } = get().cart
         const exist = items.find(
-          (x) =>
-            x.product === item.product &&
-            x.color === item.color &&
-            x.size === item.size &&
-            x.playerId === item.playerId
+          (x) => x.product === item.product && x.playerId === item.playerId
         )
         if (!exist) return
 
         const updatedCartItems = items.map((x) =>
-          x.product === item.product &&
-          x.color === item.color &&
-          x.size === item.size &&
-          x.playerId === item.playerId
+          x.product === item.product && x.playerId === item.playerId
             ? { ...exist, quantity }
             : x
         )
@@ -131,11 +113,7 @@ const useCartStore = create(
       removeItem: async (item: OrderItem) => {
         const { items, shippingAddress } = get().cart
         const updatedCartItems = items.filter(
-          (x) =>
-            x.product !== item.product ||
-            x.color !== item.color ||
-            x.size !== item.size ||
-            x.playerId !== item.playerId
+          (x) => x.product !== item.product || x.playerId !== item.playerId
         )
         set({
           cart: {

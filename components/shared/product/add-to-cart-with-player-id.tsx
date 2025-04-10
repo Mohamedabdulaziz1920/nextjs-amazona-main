@@ -20,17 +20,17 @@ export default function AddToCartWithPlayerId({
   const [playerId, setPlayerId] = useState('')
   const [error, setError] = useState('')
   const [quantity, setQuantity] = useState(1)
-  const t = useTranslations()
+  const t = useTranslations('AddToCartWithPlayerId')
 
   const handleAddToCart = async () => {
     if (!playerId.trim()) {
-      setError(t('Product.Player ID is required'))
+      setError(t('Player ID is required'))
       return
     }
 
     // تحقق إضافي مطابق للـ schema
     if (!/^[a-zA-Z0-9]+$/.test(playerId)) {
-      setError(t('Product.Player ID must contain only letters and numbers'))
+      setError(t('Player ID must contain only letters and numbers'))
       return
     }
 
@@ -44,10 +44,10 @@ export default function AddToCartWithPlayerId({
       await addItem(itemWithPlayerId, quantity)
 
       toast({
-        description: t('Product.Added to Cart'),
+        description: t('Added to Cart'),
         action: (
           <Button onClick={() => router.push('/cart')}>
-            {t('Product.Go to Cart')}
+            {t('Go to Cart')}
           </Button>
         ),
       })
@@ -55,7 +55,7 @@ export default function AddToCartWithPlayerId({
       toast({
         variant: 'destructive',
         description:
-          err instanceof Error ? err.message : t('Product.Add to Cart failed'),
+          err instanceof Error ? err.message : t('Add to Cart failed'),
       })
     }
   }
@@ -64,13 +64,13 @@ export default function AddToCartWithPlayerId({
     <div className='flex flex-col gap-4'>
       <div className='w-full'>
         <label htmlFor='player-id' className='block text-sm font-medium mb-1'>
-          * {t('Product.Player ID')}
+          * {t('Player ID')}
         </label>
         <input
           type='text'
           id='player-id'
           name='player-id'
-          placeholder={t('Product.Enter your player ID')}
+          placeholder={t('Enter your player ID')}
           required
           className={`w-full p-2 border rounded-md ${
             error ? 'border-red-500' : 'border-gray-300'
@@ -86,7 +86,7 @@ export default function AddToCartWithPlayerId({
 
       <div className='w-full'>
         <label className='block text-sm font-medium mb-1'>
-          {t('Product.Quantity')}
+          {t('Quantity')}
         </label>
         <input
           type='number'
@@ -103,7 +103,7 @@ export default function AddToCartWithPlayerId({
       </div>
 
       <Button onClick={handleAddToCart} className='w-full'>
-        {t('Product.Add to Cart')}
+        {t('Add to Cart')}
       </Button>
     </div>
   )

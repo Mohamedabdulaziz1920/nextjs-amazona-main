@@ -87,20 +87,16 @@ export default function CartPage() {
                           {item.name}
                         </Link>
                         <div>
-                          <p className='text-sm'>
-                            <span className='font-bold'>
-                              {' '}
-                              {t('Cart.Color')}:{' '}
-                            </span>{' '}
-                            {item.color}
-                          </p>
-                          <p className='text-sm'>
-                            <span className='font-bold'>
-                              {' '}
-                              {t('Cart.Size')}:{' '}
-                            </span>{' '}
-                            {item.size}
-                          </p>
+                          {/* إضافة الـ playerId هنا */}
+                          {item.playerId && (
+                            <p className='text-sm'>
+                              <span className='font-bold'>
+                                {' '}
+                                {t('Cart.Player ID')}:{' '}
+                              </span>{' '}
+                              {item.playerId}
+                            </p>
+                          )}
                         </div>
                         <div className='flex gap-2 items-center'>
                           <Select

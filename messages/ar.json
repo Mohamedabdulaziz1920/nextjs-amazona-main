@@ -52,6 +52,8 @@
     "Best Deals on Wrist Watches": "أفضل العروض على ساعات المعصم"
   },
   "Product": {
+    "player-id": "معرف اللاعب",
+    "Product_Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
     "FilterName": "تصفية بالاسم...",
     "Loading": "جاري التحميل...",
     "No results": "لا توجد نتائج",
@@ -228,10 +230,11 @@
     "Subtotal": "المجموع الفرعي",
     "Shipping": "الشحن",
     "Tax": "الضريبة",
-    "Proceed to Checkout": "المتابعة إلى الخروج",
+    "Proceed to Checkout": "المتابعة إلى الشراء",
     "Delete": "حذف",
     "Update": "تحديث",
-    "Checkout": "الخروج"
+    "Checkout": "الخروج",
+    "Player ID": "معرف اللاعب"
   },
   "Search": {
     "for": "لـ",
@@ -388,6 +391,17 @@
   "Loading": {
     "Loading": "جاري التحميل..."
   },
+  "AddToCartWithPlayerId": {
+    "Player ID is required": "معرف اللاعب مطلوب",
+    "Player ID must contain only letters and numbers": "معرف اللاعب يجب ان يكون ارقام او احرف",
+    "Go to Cart": "اذهب إلى السلة",
+    "Added to Cart": "تمت الإضافة إلى السلة",
+    "Add to Cart failed": "فشل اظافة الى السلة",
+    "Player ID": "معرف اللاعب",
+    "Enter your player ID": "‌أكتب الـID الخاص بك",
+    "Quantity": "الكمية",
+    "Add to Cart": "أضف إلى السلة"
+  },
   "Error": {
     "Error": "خطأ",
     "Try again": "حاول مرة أخرى",
@@ -406,6 +420,56 @@
       "adminPermissionRequired": "مطلوب صلاحية مشرف"
     }
   },
+  "Checkout": {
+    "shipToThisAddress": "الشحن إلى هذا العنوان",
+    "enterShippingAddress": "إدخال عنوان الشحن",
+    "yourAddress": "عنوانك",
+    "choosePaymentMethod": "اختر طريقة الدفع",
+    "useThisPaymentMethod": "استخدم طريقة الدفع هذه",
+    "itemsAndShipping": "المنتجات والشحن",
+    "deliveryDate": "تاريخ التسليم",
+    "shippingAddress": "عنوان الشحن",
+    "paymentMethod": "طريقة الدفع",
+    "orderSummary": "ملخص الطلب",
+    "items": "المنتجات:",
+    "shippingHandling": "الشحن والتوصيل:",
+    "tax": "الضريبة:",
+    "orderTotal": "إجمالي الطلب:",
+    "arriving": "ستصل",
+    "chooseShippingSpeed": "اختر سرعة الشحن:",
+    "placeYourOrder": "تقديم الطلب",
+    "reviewItems": "مراجعة المنتجات والشحن",
+    "chooseShippingAddressMessage": "اختر عنوان الشحن وطريقة الدفع لحساب تكاليف الشحن والتوصيل والضريبة.",
+    "choosePaymentMethodMessage": "اختر طريقة الدفع للمتابعة. ستتمكن من مراجعة وتعديل طلبك قبل إتمامه.",
+    "orderTimeMessage": "إذا قمت بالطلب خلال الـ {hours} ساعات و {minutes} دقيقة القادمة.",
+    "quantity": "الكمية: {quantity}",
+    "delete": "حذف",
+    "freeShipping": "شحن مجاني",
+    "privacyAgreement": "بإتمام طلبك، فإنك توافق على <privacyLink>سياسة الخصوصية</privacyLink> و <conditionsLink>شروط الاستخدام</conditionsLink> لـ {siteName}."
+  },
+  "Common": {
+    "change": "تغيير",
+    "free": "مجاناً"
+  },
+
+  "Form": {
+    "fullName": "الاسم الكامل",
+    "address": "العنوان",
+    "city": "المدينة",
+    "province": "المحافظة",
+    "country": "الدولة",
+    "postalCode": "الرمز البريدي",
+    "phoneNumber": "رقم الهاتف"
+  },
+  "Placeholders": {
+    "enterFullName": "أدخل الاسم الكامل",
+    "enterAddress": "أدخل العنوان",
+    "enterCity": "أدخل المدينة",
+    "enterProvince": "أدخل المحافظة",
+    "enterCountry": "أدخل الدولة",
+    "enterPostalCode": "أدخل الرمز البريدي",
+    "enterPhoneNumber": "أدخل رقم الهاتف"
+  },
   "TableChart": {
     "months": {
       "1": "يناير",
@@ -420,9 +484,38 @@
       "10": "أكتوبر",
       "11": "نوفمبر",
       "12": "ديسمبر",
+      "2025-01": "يناير 2025",
       "2025-02": "فبراير 2025",
-      "2025-01": "يناير 2025"
+      "2025-03": "مارس 2025",
+      "2025-04": "أبريل 2025",
+      "2025-05": "مايو 2025",
+      "2025-06": "يونيو 2025",
+      "2025-07": "2025 يوليو",
+      "2025-08": "أغسطس 2025",
+      "2025-09": "2025 سبتمبر",
+      "2025-10": "أكتوبر 2025",
+      "2025-11": "2025 نوفمبر",
+      "2025-12": "ديسمبر 2025"
     }
+  },
+  "CheckoutFooter": {
+    "needHelp": "تحتاج مساعدة؟ قم بزيارة <helpLink>مركز المساعدة</helpLink> أو <contactLink>اتصل بنا</contactLink>",
+    "orderConfirmation": "للعناصر المطلوبة من {siteName}: عند النقر على زر 'تقديم الطلب'، سنرسل لك بريدًا إلكترونيًا يؤكد استلام طلبك. لن يكتمل عقد الشراء حتى نرسل لك بريدًا إلكترونيًا يخطرك بشحن العنصر إليك. بمجرد تقديم طلبك، فإنك توافق على <privacyLink>سياسة الخصوصية</privacyLink> و <conditionsLink>شروط الاستخدام</conditionsLink> لـ {siteName}.",
+    "returnPolicy": "خلال 30 يومًا من الاستلام، يمكنك إرجاع المنتجات الجديدة غير المفتوحة وبحالتها الأصلية. تنطبق بعض الاستثناءات والقيود. <returnsLink>اطلع على سياسة الإرجاع لـ {siteName}.</returnsLink>"
+  },
+  "OrderDetails": {
+    "orderSummary": "ملخص الطلب",
+    "items": "المنتجات",
+    "shippingHandling": "الشحن والتوصيل",
+    "tax": "الضريبة",
+    "orderTotal": "إجمالي الطلب",
+    "paypalLoading": "جاري تحميل PayPal...",
+    "paypalError": "خطأ في تحميل PayPal.",
+    "viewOrder": "عرض الطلب",
+    "shippingAddress": "عنوان الشحن",
+    "paymentMethod": "طريقة الدفع",
+    "itemsAndShipping": "المنتجات والشحن",
+    "deliveryDate": "تاريخ التسليم"
   },
   "DeleteDialog": {
     "deleteButton": "حذف",
@@ -548,6 +641,8 @@
     "Seeded database successfully": "قاعدة البيانات المصنفة بنجاح"
   },
   "products": {
+    "player-id": "معرف اللاعب",
+    "Product_Enter your player ID": "‌أكتب الـID الخاص بك",
     "createSuccess": "تم إنشاء المنتج بنجاح",
     "updateSuccess": "تم تحديث المنتج بنجاح",
     "deleteSuccess": "تم حذف المنتج بنجاح",

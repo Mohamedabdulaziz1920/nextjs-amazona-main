@@ -44,6 +44,7 @@ export default async function OrdersPage(props: {
               <TableHead>Id</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Buyer</TableHead>
+              <TableHead>Player ID</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Paid</TableHead>
               <TableHead>Delivered</TableHead>
@@ -60,8 +61,8 @@ export default async function OrdersPage(props: {
                 <TableCell>
                   {order.user ? order.user.name : 'Deleted User'}
                 </TableCell>
+                <TableCell>{order.items[0]?.playerId || 'N/A'}</TableCell>
                 <TableCell>
-                  {' '}
                   <ProductPrice price={order.totalPrice} plain />
                 </TableCell>
                 <TableCell>

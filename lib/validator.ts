@@ -42,8 +42,6 @@ export const ProductInputSchema = z.object({
     .int()
     .nonnegative('count in stock must be a non-negative number'),
   tags: z.array(z.string()).default([]),
-  sizes: z.array(z.string()).default([]),
-  colors: z.array(z.string()).default([]),
   avgRating: z.coerce
     .number()
     .min(0, 'Average rating must be at least 0')
@@ -87,8 +85,6 @@ export const OrderItemSchema = z.object({
     .nonnegative('Quantity must be a non-negative number'),
   image: z.string().min(1, 'Image is required'),
   price: Price('Price'),
-  size: z.string().optional(),
-  color: z.string().optional(),
 })
 export const ShippingAddressSchema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
@@ -136,6 +132,7 @@ export const OrderInputSchema = z.object({
   deliveredAt: z.date().optional(),
   isPaid: z.boolean().default(false),
   paidAt: z.date().optional(),
+  playerId: z.string().optional(), // 👈 إذا كان اللاعب هو جزء من الطلب بالكامل
 })
 // Cart
 

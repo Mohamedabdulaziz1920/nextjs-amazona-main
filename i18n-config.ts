@@ -1,14 +1,17 @@
+// i18n-config.ts
 export const i18n = {
-  locales: [
-    { code: 'en-US', name: 'English', icon: '🇺🇸' },
-    { code: 'fr', name: 'Français', icon: '🇫🇷' },
-    { code: 'ar', name: 'العربية', icon: '🇸🇦' },
-  ],
-  defaultLocale: 'en-US',
-}
+  locales: ['en-US', 'ar'] as const, // استخدام as const لتثبيت النوع
+  defaultLocale: 'ar',
+} as const
 
-export const getDirection = (locale: string) => {
+export type Locale = (typeof i18n.locales)[number] // 'en-US' | 'ar'
+
+export function getDirection(locale: Locale): 'rtl' | 'ltr' {
   return locale === 'ar' ? 'rtl' : 'ltr'
 }
-export type I18nConfig = typeof i18n
-export type Locale = I18nConfig['locales'][number]
+
+export const routing = {
+  locales: i18n.locales,
+  defaultLocale: i18n.defaultLocale,
+  localePrefix: 'as-needed',
+} as const

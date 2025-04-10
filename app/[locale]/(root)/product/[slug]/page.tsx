@@ -18,12 +18,20 @@ import ProductSlider from '@/components/shared/product/product-slider'
 import { getTranslations } from 'next-intl/server'
 import AddToCartWithPlayerId from '@/components/shared/product/add-to-cart-with-player-id'
 
-// ✅ استخدم النوع الرسمي لتوقيع الدالة
+type PageProps = {
+  params: {
+    slug: string
+    locale?: string // جعلها اختيارية بإضافة ?
+  }
+  searchParams?: {
+    [key: string]: string | string[] | undefined
+    page?: string
+  }
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string; locale: string }
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const t = await getTranslations()
   const product = await getProductBySlug(params.slug)
 
@@ -41,15 +49,10 @@ export default async function ProductDetails({
   params,
   searchParams,
 }: {
-  params: { slug: string; locale: string }
-  searchParams?: {
-    [key: string]: string | string[] | undefined
-    page?: string
-    color?: string
-    size?: string
-  }
+  params: { slug: string; locale?: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-  const { page = '1', color, size } = searchParams || {}
+  const { page = '1' } = searchParams || {}
   const { slug, locale } = params
 
   const session = await auth()
@@ -61,9 +64,6 @@ export default async function ProductDetails({
     productId: product._id,
     page: Number(page),
   })
-
-  const selectedSize = size || product.sizes[0]
-  const selectedColor = color || product.colors[0]
 
   return (
     <div>
@@ -104,11 +104,7 @@ export default async function ProductDetails({
             </div>
 
             <div>
-              <SelectVariant
-                product={product}
-                size={selectedSize}
-                color={selectedColor}
-              />
+              <SelectVariant />
             </div>
 
             <Separator className='my-2' />
@@ -158,8 +154,6 @@ export default async function ProductDetails({
                       price: round2(product.price),
                       quantity: 1,
                       image: product.images[0],
-                      size: selectedSize,
-                      color: selectedColor,
                     }}
                   />
                 )}

@@ -1,78 +1,53 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
-import { IProduct } from '@/lib/db/models/product.model'
-import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function SelectVariant({
-  product,
-  size,
-  color,
+  players = [], // قائمة اللاعبين الاختيارية
 }: {
-  product: IProduct
-  color: string
-  size: string
+  players?: Array<{ id: string; name: string }>
 }) {
-  const selectedColor = color || product.colors[0]
-  const selectedSize = size || product.sizes[0]
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const currentPlayerId = searchParams.get('playerId')
+
+  const handleSelect = (id: string) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set('playerId', id)
+    router.replace(`?${newParams.toString()}`, { scroll: false })
+  }
 
   return (
-    <>
-      {product.colors.length > 0 && (
-        <div className='space-x-2 space-y-2'>
-          <div>Color:</div>
-          {product.colors.map((x: string) => (
+    <div className='space-y-2'>
+      {currentPlayerId ? (
+        <div className='p-2 border rounded-md bg-gray-50'>
+          <p>
+            Selected Player:{' '}
+            <span className='font-medium'>
+              {players.find((p) => p.id === currentPlayerId)?.name ||
+                currentPlayerId}
+            </span>
+          </p>
+        </div>
+      ) : (
+        <p className='text-sm text-muted-foreground'>No player selected</p>
+      )}
+
+      {players.length > 0 && (
+        <div className='flex flex-wrap gap-2'>
+          {players.map((player) => (
             <Button
-              asChild
+              key={player.id}
               variant='outline'
-              className={
-                selectedColor === x ? 'border-2 border-primary' : 'border-2'
-              }
-              key={x}
+              size='sm'
+              onClick={() => handleSelect(player.id)}
             >
-              <Link
-                replace
-                scroll={false}
-                href={`?${new URLSearchParams({
-                  color: x,
-                  size: selectedSize,
-                })}`}
-                key={x}
-              >
-                <div
-                  style={{ backgroundColor: x }}
-                  className='h-4 w-4 rounded-full border border-muted-foreground'
-                ></div>
-                {x}
-              </Link>
+              {player.name}
             </Button>
           ))}
         </div>
       )}
-      {product.sizes.length > 0 && (
-        <div className='mt-2 space-x-2 space-y-2'>
-          <div>Size:</div>
-          {product.sizes.map((x: string) => (
-            <Button
-              asChild
-              variant='outline'
-              className={
-                selectedSize === x ? 'border-2  border-primary' : 'border-2  '
-              }
-              key={x}
-            >
-              <Link
-                replace
-                scroll={false}
-                href={`?${new URLSearchParams({
-                  color: selectedColor,
-                  size: x,
-                })}`}
-              >
-                {x}
-              </Link>
-            </Button>
-          ))}
-        </div>
-      )}
-    </>
+    </div>
   )
 }

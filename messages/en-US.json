@@ -50,7 +50,87 @@
     "Best Sellers in T-Shirts": "Best Sellers in T-Shirts",
     "Best Deals on Wrist Watches": "Best Deals on Wrist Watches"
   },
+  "AddToCartWithPlayerId": {
+    "Player ID is required": "Player ID is required",
+    "Player ID must contain only letters and numbers": "Player ID must contain only letters and numbers",
+    "Go to Cart": "Go to Cart",
+    "Added to Cart": "Added to Cart",
+    "Add to Cart failed": "Add to Cart failed",
+    "Player ID": "Player ID",
+    "Enter your player ID": "Enter your player ID",
+    "Quantity": "Quantity",
+    "Add to Cart": "Add to Cart"
+  },
+  "Checkout": {
+    "shipToThisAddress": "Ship to this address",
+    "enterShippingAddress": "Enter shipping address",
+    "yourAddress": "Your address",
+    "choosePaymentMethod": "Choose a payment method",
+    "useThisPaymentMethod": "Use this payment method",
+    "itemsAndShipping": "Items and shipping",
+    "deliveryDate": "Delivery date",
+    "shippingAddress": "Shipping address",
+    "paymentMethod": "Payment method",
+    "orderSummary": "Order Summary",
+    "items": "Items:",
+    "shippingHandling": "Shipping & Handling:",
+    "tax": "Tax:",
+    "orderTotal": "Order Total:",
+    "arriving": "Arriving",
+    "chooseShippingSpeed": "Choose a shipping speed:",
+    "placeYourOrder": "Place Your Order",
+    "reviewItems": "Review items and shipping",
+    "chooseShippingAddressMessage": "Choose a shipping address and payment method in order to calculate shipping, handling, and tax.",
+    "choosePaymentMethodMessage": "Choose a payment method to continue checking out. You'll still have a chance to review and edit your order before it's final.",
+    "orderTimeMessage": "If you order in the next {hours} hours and {minutes} minutes.",
+    "quantity": "Qty: {quantity}",
+    "delete": "Delete",
+    "freeShipping": "FREE Shipping",
+    "privacyAgreement": "By placing your order, you agree to {siteName}'s <privacyLink>privacy notice</privacyLink> and <conditionsLink>conditions of use</conditionsLink>."
+  },
+  "Common": {
+    "change": "Change",
+    "free": "FREE"
+  },
+  "Form": {
+    "fullName": "Full Name",
+    "address": "Address",
+    "city": "City",
+    "province": "Province",
+    "country": "Country",
+    "postalCode": "Postal Code",
+    "phoneNumber": "Phone number"
+  },
+  "Placeholders": {
+    "enterFullName": "Enter full name",
+    "enterAddress": "Enter address",
+    "enterCity": "Enter city",
+    "enterProvince": "Enter province",
+    "enterCountry": "Enter country",
+    "enterPostalCode": "Enter postal code",
+    "enterPhoneNumber": "Enter phone number"
+  },
+  "CheckoutFooter": {
+    "needHelp": "Need help? Check our <helpLink>Help Center</helpLink> or <contactLink>Contact Us</contactLink>",
+    "orderConfirmation": "For an item ordered from {siteName}: When you click the 'Place Your Order' button, we will send you an e-mail acknowledging receipt of your order. Your contract to purchase an item will not be complete until we send you an e-mail notifying you that the item has been shipped to you. By placing your order, you agree to {siteName}'s <privacyLink>privacy notice</privacyLink> and <conditionsLink>conditions of use</conditionsLink>.",
+    "returnPolicy": "Within 30 days of delivery, you may return new, unopened merchandise in its original condition. Exceptions and restrictions apply. <returnsLink>See {siteName}'s Returns Policy.</returnsLink>"
+  },
+  "OrderDetails": {
+    "orderSummary": "Order Summary",
+    "items": "Items",
+    "shippingHandling": "Shipping & Handling",
+    "tax": "Tax",
+    "orderTotal": "Order Total",
+    "paypalLoading": "Loading PayPal...",
+    "paypalError": "Error in loading PayPal.",
+    "viewOrder": "View Order",
+    "shippingAddress": "Shipping Address",
+    "paymentMethod": "Payment Method",
+    "itemsAndShipping": "Items and shipping",
+    "deliveryDate": "Delivery date"
+  },
   "Product": {
+    "Product_Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
     "FilterName": "Filter name...",
     "Loading": "Loading...",
     "No results": "No results",
@@ -229,7 +309,8 @@
     "Proceed to Checkout": "Proceed to Checkout",
     "Delete": "Delete",
     "Update": "Update",
-    "Checkout": "Checkout"
+    "Checkout": "Checkout",
+    "Player ID": "Player ID"
   },
   "Search": {
     "for": "for",
@@ -412,8 +493,18 @@
       "10": "October",
       "11": "November",
       "12": "December",
+      "2025-01": "January 2025",
       "2025-02": "February 2025",
-      "2025-01": "January 2025"
+      "2025-03": "March 2025",
+      "2025-04": "April 2025",
+      "2025-05": "May 2025",
+      "2025-06": "June 2025",
+      "2025-07": "July 2025",
+      "2025-08": "August 2025",
+      "2025-09": "September 2025",
+      "2025-10": "October 2025",
+      "2025-11": "November 2025",
+      "2025-12": "December 2025"
     }
   },
   "DeleteDialog": {
@@ -542,6 +633,8 @@
     "Cancel": "Cancel"
   },
   "products": {
+    "player-id": "player-id",
+    "Enter your player ID": "Enter your player ID",
     "createSuccess": "Product created successfully",
     "updateSuccess": "Product updated successfully",
     "deleteSuccess": "Product deleted successfully",

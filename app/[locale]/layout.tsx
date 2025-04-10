@@ -10,7 +10,7 @@ import { getSetting } from '@/lib/actions/setting.actions'
 import { cookies } from 'next/headers'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
-
+import type { Locale } from '@/i18n/routing'
 // إعداد خط Cairo للعربية
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
@@ -38,18 +38,19 @@ export async function generateMetadata() {
     metadataBase: new URL(url),
   }
 }
-
 export default async function RootLayout({
   params,
   children,
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
   children: React.ReactNode
 }) {
+  const { locale } = params // ✅
   const setting = await getSetting()
-  const currencyCookie = cookies().get('currency')
+  const cookieStore = await cookies()
+  const currencyCookie = cookieStore.get('currency')
   const currency = currencyCookie ? currencyCookie.value : 'USD'
-  const { locale } = params
+
   const session = await auth()
 
   // التحقق من صحة اللغة

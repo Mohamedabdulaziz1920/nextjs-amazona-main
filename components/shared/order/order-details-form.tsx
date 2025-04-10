@@ -91,6 +91,7 @@ export default function OrderDetailsForm({
               <TableHeader>
                 <TableRow>
                   <TableHead>Item</TableHead>
+                  <TableHead>Player ID</TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Price</TableHead>
                 </TableRow>
@@ -109,7 +110,14 @@ export default function OrderDetailsForm({
                           width={50}
                           height={50}
                         ></Image>
-                        <span className='px-2'>{item.name}</span>
+                        <div className='px-2 flex flex-col'>
+                          <span>{item.name}</span>
+                          {item.playerId && (
+                            <span className='text-xs text-muted-foreground'>
+                              Player ID: {item.playerId}
+                            </span>
+                          )}
+                        </div>
                       </Link>
                     </TableCell>
                     <TableCell>

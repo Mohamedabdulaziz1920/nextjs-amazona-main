@@ -13,7 +13,7 @@ import {
 } from '@/lib/actions/order.actions'
 import { IOrder } from '@/lib/db/models/order.model'
 import { formatDateTime } from '@/lib/utils'
-
+import { useTranslations } from 'next-intl'
 import CheckoutFooter from '../checkout-footer'
 import { redirect, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -25,6 +25,7 @@ import { loadStripe } from '@stripe/stripe-js'
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 )
+
 export default function OrderDetailsForm({
   order,
   paypalClientId,
@@ -35,6 +36,8 @@ export default function OrderDetailsForm({
   isAdmin: boolean
   clientSecret: string | null
 }) {
+  const t = useTranslations('OrderDetails')
+  const commonT = useTranslations('Common')
   const router = useRouter()
   const {
     shippingAddress,
@@ -52,16 +55,18 @@ export default function OrderDetailsForm({
   if (isPaid) {
     redirect(`/account/orders/${order._id}`)
   }
+
   function PrintLoadingState() {
     const [{ isPending, isRejected }] = usePayPalScriptReducer()
     let status = ''
     if (isPending) {
-      status = 'Loading PayPal...'
+      status = t('paypalLoading')
     } else if (isRejected) {
-      status = 'Error in loading PayPal.'
+      status = t('paypalError')
     }
     return status
   }
+
   const handleCreatePayPalOrder = async () => {
     const res = await createPayPalOrder(order._id)
     if (!res.success)
@@ -71,6 +76,7 @@ export default function OrderDetailsForm({
       })
     return res.data
   }
+
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
     const res = await approvePayPalOrder(order._id, data)
     toast({
@@ -83,29 +89,28 @@ export default function OrderDetailsForm({
     <Card>
       <CardContent className='p-4'>
         <div>
-          <div className='text-lg font-bold'>Order Summary</div>
+          <div className='text-lg font-bold'>{t('orderSummary')}</div>
           <div className='space-y-2'>
             <div className='flex justify-between'>
-              <span>Items:</span>
+              <span>{t('items')}:</span>
               <span>
-                {' '}
                 <ProductPrice price={itemsPrice} plain />
               </span>
             </div>
             <div className='flex justify-between'>
-              <span>Shipping & Handling:</span>
+              <span>{t('shippingHandling')}:</span>
               <span>
                 {shippingPrice === undefined ? (
                   '--'
                 ) : shippingPrice === 0 ? (
-                  'FREE'
+                  commonT('free')
                 ) : (
                   <ProductPrice price={shippingPrice} plain />
                 )}
               </span>
             </div>
             <div className='flex justify-between'>
-              <span> Tax:</span>
+              <span>{t('tax')}:</span>
               <span>
                 {taxPrice === undefined ? (
                   '--'
@@ -114,10 +119,9 @@ export default function OrderDetailsForm({
                 )}
               </span>
             </div>
-            <div className='flex justify-between  pt-1 font-bold text-lg'>
-              <span> Order Total:</span>
+            <div className='flex justify-between pt-1 font-bold text-lg'>
+              <span>{t('orderTotal')}:</span>
               <span>
-                {' '}
                 <ProductPrice price={totalPrice} plain />
               </span>
             </div>
@@ -152,7 +156,7 @@ export default function OrderDetailsForm({
                 className='w-full rounded-full'
                 onClick={() => router.push(`/account/orders/${order._id}`)}
               >
-                View Order
+                {t('viewOrder')}
               </Button>
             )}
           </div>
@@ -169,7 +173,7 @@ export default function OrderDetailsForm({
           <div>
             <div className='grid md:grid-cols-3 my-3 pb-3'>
               <div className='text-lg font-bold'>
-                <span>Shipping Address</span>
+                <span>{t('shippingAddress')}</span>
               </div>
               <div className='col-span-2'>
                 <p>
@@ -185,7 +189,7 @@ export default function OrderDetailsForm({
           <div className='border-y'>
             <div className='grid md:grid-cols-3 my-3 pb-3'>
               <div className='text-lg font-bold'>
-                <span>Payment Method</span>
+                <span>{t('paymentMethod')}</span>
               </div>
               <div className='col-span-2'>
                 <p>{paymentMethod}</p>
@@ -195,11 +199,11 @@ export default function OrderDetailsForm({
 
           <div className='grid md:grid-cols-3 my-3 pb-3'>
             <div className='flex text-lg font-bold'>
-              <span>Items and shipping</span>
+              <span>{t('itemsAndShipping')}</span>
             </div>
             <div className='col-span-2'>
               <p>
-                Delivery date:
+                {t('deliveryDate')}:{' '}
                 {formatDateTime(expectedDeliveryDate).dateOnly}
               </p>
               <ul>

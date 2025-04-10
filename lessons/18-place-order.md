@@ -1,26 +1,25 @@
-# 18-place-order
-
-## update lib/validator.ts
+## update `lib/validator.ts`
 
 ```ts
+// تعريف نوع معرف MongoDB والتحقق من صحته باستخدام تعبير منتظم
 const MongoId = z
   .string()
   .regex(/^[0-9a-fA-F]{24}$/, { message: 'Invalid MongoDB ID' })
 
-// Order
+// تعريف مخطط التحقق من صحة بيانات الطلب (Order)
 export const OrderInputSchema = z.object({
   user: z.union([
-    MongoId,
+    MongoId, // يمكن أن يكون المستخدم معرف MongoDB
     z.object({
-      name: z.string(),
+      name: z.string(), // أو كائن يحتوي على الاسم والبريد
       email: z.string().email(),
     }),
   ]),
   items: z
-    .array(OrderItemSchema)
-    .min(1, 'Order must contain at least one item'),
-  shippingAddress: ShippingAddressSchema,
-  paymentMethod: z.string().min(1, 'Payment method is required'),
+    .array(OrderItemSchema) // مصفوفة من عناصر الطلب
+    .min(1, 'Order must contain at least one item'), // يجب أن تحتوي على عنصر واحد على الأقل
+  shippingAddress: ShippingAddressSchema, // عنوان الشحن
+  paymentMethod: z.string().min(1, 'Payment method is required'), // طريقة الدفع مطلوبة
   paymentResult: z
     .object({
       id: z.string(),
@@ -28,51 +27,56 @@ export const OrderInputSchema = z.object({
       email_address: z.string(),
       pricePaid: z.string(),
     })
-    .optional(),
-  itemsPrice: Price('Items price'),
-  shippingPrice: Price('Shipping price'),
-  taxPrice: Price('Tax price'),
-  totalPrice: Price('Total price'),
-  expectedDeliveryDate: z
-    .date()
-    .refine(
-      (value) => value > new Date(),
-      'Expected delivery date must be in the future'
-    ),
-  isDelivered: z.boolean().default(false),
-  deliveredAt: z.date().optional(),
-  isPaid: z.boolean().default(false),
-  paidAt: z.date().optional(),
+    .optional(), // نتائج الدفع اختيارية
+  itemsPrice: Price('Items price'), // سعر العناصر
+  shippingPrice: Price('Shipping price'), // سعر الشحن
+  taxPrice: Price('Tax price'), // الضريبة
+  totalPrice: Price('Total price'), // السعر الإجمالي
+  expectedDeliveryDate: z.date().refine(
+    (value) => value > new Date(), // يجب أن يكون تاريخ التسليم المتوقع في المستقبل
+    'Expected delivery date must be in the future'
+  ),
+  isDelivered: z.boolean().default(false), // حالة التسليم الافتراضية
+  deliveredAt: z.date().optional(), // تاريخ التسليم إن وُجد
+  isPaid: z.boolean().default(false), // حالة الدفع الافتراضية
+  paidAt: z.date().optional(), // تاريخ الدفع إن وُجد
 })
 ```
 
-## update types/index.ts
+---
+
+## update `types/index.ts`
 
 ```ts
-  OrderInputSchema,
-export type IOrderInput = z.infer<typeof OrderInputSchema>
+  OrderInputSchema, // تصدير المخطط الخاص بالطلب
+export type IOrderInput = z.infer<typeof OrderInputSchema> // استخراج نوع TypeScript من المخطط
 ```
 
-## create lib/db/models/order.model.ts
+---
+
+## create `lib/db/models/order.model.ts`
 
 ```ts
-import { IOrderInput } from '@/types'
+import { IOrderInput } from '@/types' // استيراد نوع بيانات الطلب
 import { Document, Model, model, models, Schema } from 'mongoose'
 
+// تعريف واجهة الطلب مع توارث الخصائص من Mongoose و IOrderInput
 export interface IOrder extends Document, IOrderInput {
   _id: string
   createdAt: Date
   updatedAt: Date
 }
 
+// تعريف مخطط الطلب في قاعدة البيانات
 const orderSchema = new Schema<IOrder>(
   {
     user: {
-      type: Schema.Types.ObjectId as unknown as typeof String,
+      type: Schema.Types.ObjectId as unknown as typeof String, // معرف المستخدم
       ref: 'User',
       required: true,
     },
     items: [
+      // عناصر الطلب
       {
         product: {
           type: Schema.Types.ObjectId,
@@ -92,6 +96,7 @@ const orderSchema = new Schema<IOrder>(
       },
     ],
     shippingAddress: {
+      // عنوان الشحن
       fullName: { type: String, required: true },
       street: { type: String, required: true },
       city: { type: String, required: true },
@@ -100,64 +105,69 @@ const orderSchema = new Schema<IOrder>(
       province: { type: String, required: true },
       phone: { type: String, required: true },
     },
-    expectedDeliveryDate: { type: Date, required: true },
-    paymentMethod: { type: String, required: true },
-    paymentResult: { id: String, status: String, email_address: String },
-    itemsPrice: { type: Number, required: true },
-    shippingPrice: { type: Number, required: true },
-    taxPrice: { type: Number, required: true },
-    totalPrice: { type: Number, required: true },
-    isPaid: { type: Boolean, required: true, default: false },
-    paidAt: { type: Date },
-    isDelivered: { type: Boolean, required: true, default: false },
-    deliveredAt: { type: Date },
-    createdAt: { type: Date, default: Date.now },
+    expectedDeliveryDate: { type: Date, required: true }, // تاريخ التسليم المتوقع
+    paymentMethod: { type: String, required: true }, // طريقة الدفع
+    paymentResult: { id: String, status: String, email_address: String }, // تفاصيل الدفع
+    itemsPrice: { type: Number, required: true }, // سعر العناصر
+    shippingPrice: { type: Number, required: true }, // سعر الشحن
+    taxPrice: { type: Number, required: true }, // الضريبة
+    totalPrice: { type: Number, required: true }, // السعر الإجمالي
+    isPaid: { type: Boolean, required: true, default: false }, // حالة الدفع
+    paidAt: { type: Date }, // تاريخ الدفع
+    isDelivered: { type: Boolean, required: true, default: false }, // حالة التسليم
+    deliveredAt: { type: Date }, // تاريخ التسليم
+    createdAt: { type: Date, default: Date.now }, // تاريخ الإنشاء
   },
   {
-    timestamps: true,
+    timestamps: true, // إضافة createdAt و updatedAt تلقائياً
   }
 )
 
+// إنشاء النموذج أو استخدام الموجود مسبقاً
 const Order =
   (models.Order as Model<IOrder>) || model<IOrder>('Order', orderSchema)
 
-export default Order
+export default Order // تصدير النموذج
 ```
 
-## update lib/actions/order.actions.ts
+---
+
+## update `lib/actions/order.actions.ts`
 
 ```ts
--import { OrderItem, ShippingAddress } from '@/types'
--import { round2 } from '../utils'
-'use server'
+// import غير مستخدم تم حذفه
+// 'use server' لجعل الدالة تعمل في بيئة الخادم
 
-import { Cart, OrderItem, ShippingAddress } from '@/types'
-import { formatError, round2 } from '../utils'
-import { connectToDatabase } from '../db'
-import { auth } from '@/auth'
-import { OrderInputSchema } from '../validator'
-import Order from '../db/models/order.model'
+import { Cart, OrderItem, ShippingAddress } from '@/types' // استيراد الأنواع اللازمة
+import { formatError, round2 } from '../utils' // أدوات مساعدة
+import { connectToDatabase } from '../db' // الاتصال بقاعدة البيانات
+import { auth } from '@/auth' // التحقق من جلسة المستخدم
+import { OrderInputSchema } from '../validator' // مخطط التحقق من الطلب
+import Order from '../db/models/order.model' // نموذج الطلب من قاعدة البيانات
 
-// CREATE
+// دالة لإنشاء الطلب من جانب الخادم
 export const createOrder = async (clientSideCart: Cart) => {
   try {
-    await connectToDatabase()
-    const session = await auth()
-    if (!session) throw new Error('User not authenticated')
-    // recalculate price and delivery date on the server
+    await connectToDatabase() // الاتصال بقاعدة البيانات
+    const session = await auth() // التحقق من جلسة المستخدم
+    if (!session) throw new Error('User not authenticated') // إذا لم يكن هناك جلسة، يتم رفض العملية
+
+    // إعادة حساب الأسعار وتاريخ التسليم على الخادم
     const createdOrder = await createOrderFromCart(
       clientSideCart,
       session.user.id!
     )
     return {
       success: true,
-      message: 'Order placed successfully',
-      data: { orderId: createdOrder._id.toString() },
+      message: 'Order placed successfully', // تم إنشاء الطلب بنجاح
+      data: { orderId: createdOrder._id.toString() }, // إرجاع معرف الطلب
     }
   } catch (error) {
-    return { success: false, message: formatError(error) }
+    return { success: false, message: formatError(error) } // إرجاع الخطأ في حال الفشل
   }
 }
+
+// دالة فرعية لإنشاء الطلب من بيانات السلة
 export const createOrderFromCart = async (
   clientSideCart: Cart,
   userId: string
@@ -165,12 +175,14 @@ export const createOrderFromCart = async (
   const cart = {
     ...clientSideCart,
     ...calcDeliveryDateAndPrice({
+      // حساب السعر وتاريخ التوصيل
       items: clientSideCart.items,
       shippingAddress: clientSideCart.shippingAddress,
       deliveryDateIndex: clientSideCart.deliveryDateIndex,
     }),
   }
 
+  // التحقق من صحة الطلب باستخدام OrderInputSchema
   const order = OrderInputSchema.parse({
     user: userId,
     items: cart.items,
@@ -182,47 +194,64 @@ export const createOrderFromCart = async (
     totalPrice: cart.totalPrice,
     expectedDeliveryDate: cart.expectedDeliveryDate,
   })
-  return await Order.create(order)
+
+  return await Order.create(order) // إنشاء الطلب في قاعدة البيانات
 }
 ```
 
-## update app/checkout/checkout-form.tsx
+---
+
+## update `app/checkout/checkout-form.tsx`
 
 ```ts
-import { createOrder } from '@/lib/actions/order.actions'
-import { toast } from '@/hooks/use-toast'
-    clearCart,
--    // TODO: place order
+import { createOrder } from '@/lib/actions/order.actions' // استيراد دالة إنشاء الطلب
+import { toast } from '@/hooks/use-toast' // استيراد التنبيهات
+    clearCart, // دالة لتفريغ السلة بعد الطلب
+
+    // تنفيذ طلب الشراء
     const res = await createOrder({
-      items,
-      shippingAddress,
+      items, // عناصر السلة
+      shippingAddress, // عنوان الشحن
       expectedDeliveryDate: calculateFutureDate(
-        AVAILABLE_DELIVERY_DATES[deliveryDateIndex!].daysToDeliver
+        AVAILABLE_DELIVERY_DATES[deliveryDateIndex!].daysToDeliver // حساب تاريخ التسليم بناءً على الاختيار
       ),
-      deliveryDateIndex,
-      paymentMethod,
-      itemsPrice,
-      shippingPrice,
-      taxPrice,
-      totalPrice,
+      deliveryDateIndex, // مؤشر تاريخ التوصيل
+      paymentMethod, // طريقة الدفع
+      itemsPrice, // سعر العناصر
+      shippingPrice, // سعر الشحن
+      taxPrice, // الضريبة
+      totalPrice, // المجموع الكلي
     })
+
+    // معالجة النتيجة
     if (!res.success) {
       toast({
-        description: res.message,
-        variant: 'destructive',
+        description: res.message, // عرض رسالة الخطأ
+        variant: 'destructive', // نمط خطأ
       })
     } else {
       toast({
-        description: res.message,
+        description: res.message, // عرض رسالة النجاح
         variant: 'default',
       })
-      clearCart()
-      router.push(`/checkout/${res.data?.orderId}`)
+      clearCart() // تفريغ السلة
+      router.push(`/checkout/${res.data?.orderId}`) // التوجيه إلى صفحة تأكيد الطلب
     }
 ```
 
-## npm run build
+---
 
-## commit changes and push to GitHub
+## أوامر تنفيذية
 
-## go to https://nextjs-amazona.vercel.app
+```bash
+# بناء المشروع
+npm run build
+
+# رفع التعديلات إلى GitHub
+commit changes and push to GitHub
+
+# فتح التطبيق على الرابط التالي
+go to https://nextjs-amazona.vercel.app
+```
+
+---

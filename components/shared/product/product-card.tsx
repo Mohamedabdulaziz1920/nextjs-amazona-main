@@ -45,6 +45,7 @@ const ProductCard = ({
       </div>
     </Link>
   )
+
   const ProductDetails = () => (
     <div className='flex-1 space-y-2'>
       <p className='font-bold'>{product.brand}</p>
@@ -72,6 +73,7 @@ const ProductCard = ({
       />
     </div>
   )
+
   const AddButton = () => (
     <div className='w-full text-center'>
       <AddToCart
@@ -79,8 +81,6 @@ const ProductCard = ({
         item={{
           clientId: generateId(),
           product: product._id,
-          size: product.sizes[0],
-          color: product.colors[0],
           countInStock: product.countInStock,
           name: product.name,
           slug: product.slug,
@@ -88,6 +88,7 @@ const ProductCard = ({
           price: round2(product.price),
           quantity: 1,
           image: product.images[0],
+          playerId: 'your-player-id', // إضافة playerId هنا
         }}
       />
     </div>
@@ -106,13 +107,13 @@ const ProductCard = ({
       )}
     </div>
   ) : (
-    <Card className='flex flex-col  '>
+    <Card className='flex flex-col'>
       <CardHeader className='p-3'>
         <ProductImage />
       </CardHeader>
       {!hideDetails && (
         <>
-          <CardContent className='p-3 flex-1  text-center'>
+          <CardContent className='p-3 flex-1 text-center'>
             <ProductDetails />
           </CardContent>
           <CardFooter className='p-3'>
