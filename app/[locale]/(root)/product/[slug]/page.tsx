@@ -32,6 +32,7 @@ type PageProps = {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const t = await getTranslations()
   const product = await getProductBySlug(params.slug)
 

@@ -52,8 +52,8 @@
     "Best Deals on Wrist Watches": "أفضل العروض على ساعات المعصم"
   },
   "Product": {
-    "player-id": "معرف اللاعب",
-    "Product_Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
+    "player id": "معرف اللاعب",
+    "Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
     "FilterName": "تصفية بالاسم...",
     "Loading": "جاري التحميل...",
     "No results": "لا توجد نتائج",
@@ -641,8 +641,8 @@
     "Seeded database successfully": "قاعدة البيانات المصنفة بنجاح"
   },
   "products": {
-    "player-id": "معرف اللاعب",
-    "Product_Enter your player ID": "‌أكتب الـID الخاص بك",
+    "player id": "معرف اللاعب",
+    "Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
     "createSuccess": "تم إنشاء المنتج بنجاح",
     "updateSuccess": "تم تحديث المنتج بنجاح",
     "deleteSuccess": "تم حذف المنتج بنجاح",
