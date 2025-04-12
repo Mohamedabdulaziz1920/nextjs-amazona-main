@@ -54,15 +54,20 @@ export default async function OrdersPage(props: {
           <Table className='min-w-full'>
             <TableHeader className='bg-gray-50 dark:bg-gray-800'>
               <TableRow>
-                <TableHead className='w-[120px]'>{t('Id')}</TableHead>
-
-                <TableHead>{t('Player ID')}</TableHead>
+                <TableHead className='text-right w-[120px]'>
+                  {t('Id')}
+                </TableHead>
+                <TableHead className='text-right'>{t('Player ID')}</TableHead>
                 <TableHead className='text-right'>{t('Total')}</TableHead>
-                <TableHead>{t('Paid')}</TableHead>
-                <TableHead>{t('Delivered')}</TableHead>
-                <TableHead className='min-w-[150px]'>{t('Date')}</TableHead>
-                <TableHead>{t('Buyer')}</TableHead>
-                <TableHead className='w-[180px]'>{t('Actions')}</TableHead>
+                <TableHead className='text-right'>{t('Paid')}</TableHead>
+                <TableHead className='text-right'>{t('Delivered')}</TableHead>
+                <TableHead className='text-right min-w-[150px]'>
+                  {t('Date')}
+                </TableHead>
+                <TableHead className='text-right'>{t('Buyer')}</TableHead>
+                <TableHead className='text-right w-[180px]'>
+                  {t('Actions')}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
