@@ -316,21 +316,19 @@
     "create": "Create"
   },
   "OrdersPage": {
-    "adminPermissionRequired": "Admin permission required",
-    "orders": "Orders",
-    "tableHeaders": {
-      "id": "ID",
-      "date": "Date",
-      "buyer": "Buyer",
-      "Player ID": "Player ID",
-      "total": "Total",
-      "paid": "Paid",
-      "delivered": "Delivered",
-      "actions": "Actions"
-    },
-    "deletedUser": "Deleted User",
-    "no": "No",
-    "details": "Details"
+    "Admin permission required": "Admin permission required",
+    "Orders": "Orders",
+    "Id": "Id",
+    "Date": "Date",
+    "Buyer": "Buyer",
+    "Player ID": "Player ID",
+    "Total": "Total",
+    "Paid": "Paid",
+    "Delivered": "Delivered",
+    "Actions": "Actions",
+    "Deleted User": "Deleted User",
+    "No": "No",
+    "Details": "Details"
   },
   "Cart": {
     "Shopping Cart": "Shopping Cart",

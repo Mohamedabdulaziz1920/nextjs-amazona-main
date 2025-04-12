@@ -240,18 +240,16 @@
     "create": "إنشاء منتج جديد"
   },
   "OrdersPage": {
-    "adminPermissionRequired": "مطلوب صلاحية مشرف",
-    "orders": "الطلبات",
-    "tableHeaders": {
-      "Id": "المعرف",
-      "Date": "التاريخ",
-      "Buyer": "المشتري",
-      "Player ID": "معرف اللاعب",
-      "Total": "المجموع",
-      "Paid": "مدفوع",
-      "Delivered": "تم التوصيل",
-      "Actions": "الإجراءات"
-    },
+    "Admin permission required": "مطلوب صلاحية مشرف",
+    "Orders": "الطلبات",
+    "Id": "المعرف",
+    "Date": "التاريخ",
+    "Buyer": "المشتري",
+    "Player ID": "معرف اللاعب",
+    "Total": "المجموع",
+    "Paid": "مدفوع",
+    "Delivered": "تم التوصيل",
+    "Actions": "الإجراءات",
     "Deleted User": "مستخدم محذوف",
     "No": "لا",
     "Details": "التفاصيل"
