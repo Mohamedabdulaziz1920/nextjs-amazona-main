@@ -39,7 +39,7 @@ export default async function OrdersPage(props: {
   })
 
   return (
-    <div className='container mx-auto px-2 py-8'>
+    <div className='container mx-auto px-1 py-8'>
       <div className='mb-8'>
         <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>
           {t('Orders')}
