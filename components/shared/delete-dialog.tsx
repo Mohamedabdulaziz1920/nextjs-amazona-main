@@ -14,15 +14,33 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { useTranslations } from 'next-intl'
 
+interface DeleteDialogProps {
+  id: string
+  action: (id: string) => Promise<{ success: boolean; message: string }>
+  callbackAction?: () => void
+  buttonProps?: {
+    variant?:
+      | 'default'
+      | 'destructive'
+      | 'outline'
+      | 'secondary'
+      | 'ghost'
+      | 'link'
+    size?: 'default' | 'sm' | 'lg' | 'icon'
+    className?: string
+  }
+}
+
 export default function DeleteDialog({
   id,
   action,
   callbackAction,
-}: {
-  id: string
-  action: (id: string) => Promise<{ success: boolean; message: string }>
-  callbackAction?: () => void
-}) {
+  buttonProps = {
+    variant: 'destructive',
+    size: 'sm',
+    className: 'hover:bg-red-600 dark:hover:bg-red-700',
+  },
+}: DeleteDialogProps) {
   const t = useTranslations('DeleteDialog')
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -31,9 +49,7 @@ export default function DeleteDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button size='sm' variant='outline'>
-          {t('deleteButton')}
-        </Button>
+        <Button {...buttonProps}>{t('deleteButton')}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

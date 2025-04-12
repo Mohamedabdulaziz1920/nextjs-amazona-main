@@ -96,27 +96,32 @@ export default async function OrdersPage(props: {
                     <ProductPrice price={order.totalPrice} plain />
                   </TableCell>
                   <TableCell>
-                    {order.isPaid && order.paidAt ? (
-                      <Badge className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs'>
-                        {formatDateTime(order.paidAt).dateTime}
-                      </Badge>
-                    ) : (
-                      <Badge variant='secondary' className='text-xs'>
-                        {t('No')}
-                      </Badge>
-                    )}
+                    <Button
+                      size='sm'
+                      className={`h-6 text-xs ${
+                        order.isPaid
+                          ? 'bg-green-500 hover:bg-green-600 text-white'
+                          : 'bg-red-500 hover:bg-red-600 text-white'
+                      }`}
+                    >
+                      {order.isPaid && order.paidAt
+                        ? formatDateTime(order.paidAt).dateTime
+                        : t('No')}
+                    </Button>
                   </TableCell>
-
                   <TableCell>
-                    {order.isDelivered && order.deliveredAt ? (
-                      <Badge className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs'>
-                        {formatDateTime(order.deliveredAt).dateTime}
-                      </Badge>
-                    ) : (
-                      <Badge variant='secondary' className='text-xs'>
-                        {t('No')}
-                      </Badge>
-                    )}
+                    <Button
+                      size='sm'
+                      className={`h-6 text-xs ${
+                        order.isDelivered
+                          ? 'bg-green-500 hover:bg-green-600 text-white'
+                          : 'bg-red-500 hover:bg-red-600 text-white'
+                      }`}
+                    >
+                      {order.isDelivered && order.deliveredAt
+                        ? formatDateTime(order.deliveredAt).dateTime
+                        : t('No')}
+                    </Button>
                   </TableCell>
                   <TableCell className='flex gap-2'>
                     <Button
@@ -129,7 +134,15 @@ export default async function OrdersPage(props: {
                         {t('Details')}
                       </Link>
                     </Button>
-                    <DeleteDialog id={order._id} action={deleteOrder} />
+                    <DeleteDialog
+                      id={order._id}
+                      action={deleteOrder}
+                      buttonProps={{
+                        variant: 'destructive',
+                        size: 'sm',
+                        className: 'hover:bg-red-600 dark:hover:bg-red-700',
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
