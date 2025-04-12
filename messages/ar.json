@@ -243,18 +243,18 @@
     "adminPermissionRequired": "مطلوب صلاحية مشرف",
     "orders": "الطلبات",
     "tableHeaders": {
-      "id": "المعرف",
-      "date": "التاريخ",
-      "buyer": "المشتري",
+      "Id": "المعرف",
+      "Date": "التاريخ",
+      "Buyer": "المشتري",
       "Player ID": "معرف اللاعب",
-      "total": "المجموع",
-      "paid": "مدفوع",
-      "delivered": "تم التوصيل",
-      "actions": "الإجراءات"
+      "Total": "المجموع",
+      "Paid": "مدفوع",
+      "Delivered": "تم التوصيل",
+      "Actions": "الإجراءات"
     },
-    "deletedUser": "مستخدم محذوف",
-    "no": "لا",
-    "details": "التفاصيل"
+    "Deleted User": "مستخدم محذوف",
+    "No": "لا",
+    "Details": "التفاصيل"
   },
   "Cart": {
     "Shopping Cart": "عربة التسوق",
