@@ -26,48 +26,25 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { toSlug } from '@/lib/utils'
 import { IProductInput } from '@/types'
 import { useTranslations } from 'next-intl'
-const productDefaultValues: IProductInput =
-  process.env.NODE_ENV === 'development'
-    ? {
-        name: '',
-        slug: '',
-        category: '',
-        images: [],
-        brand: '',
-        description: '',
-        price: 0,
-        listPrice: 0,
-        countInStock: 0,
-        numReviews: 0,
-        avgRating: 0,
-        numSales: 0,
-        isPublished: false,
-        tags: [],
-        sizes: [],
-        colors: [],
-        ratingDistribution: [],
-        reviews: [],
-      }
-    : {
-        name: '',
-        slug: '',
-        category: '',
-        images: [],
-        brand: '',
-        description: '',
-        price: 0,
-        listPrice: 0,
-        countInStock: 0,
-        numReviews: 0,
-        avgRating: 0,
-        numSales: 0,
-        isPublished: false,
-        tags: [],
-        sizes: [],
-        colors: [],
-        ratingDistribution: [],
-        reviews: [],
-      }
+
+const productDefaultValues: IProductInput = {
+  name: '',
+  slug: '',
+  category: '',
+  images: [],
+  brand: '',
+  description: '',
+  price: 0,
+  listPrice: 0,
+  countInStock: 0,
+  numReviews: 0,
+  avgRating: 0,
+  numSales: 0,
+  isPublished: false,
+  tags: [],
+  ratingDistribution: [],
+  reviews: [],
+}
 
 const ProductForm = ({
   type,
@@ -90,6 +67,7 @@ const ProductForm = ({
   })
 
   const { toast } = useToast()
+
   async function onSubmit(values: IProductInput) {
     if (type === 'Create') {
       const res = await createProduct(values)
@@ -105,6 +83,7 @@ const ProductForm = ({
         router.push(`/admin/products`)
       }
     }
+
     if (type === 'Update') {
       if (!productId) {
         router.push(`/admin/products`)
@@ -121,6 +100,7 @@ const ProductForm = ({
       }
     }
   }
+
   const images = form.watch('images')
 
   return (
@@ -140,7 +120,6 @@ const ProductForm = ({
                 <FormControl>
                   <Input placeholder={t('Enter product name')} {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -152,7 +131,6 @@ const ProductForm = ({
             render={({ field }) => (
               <FormItem className='w-full'>
                 <FormLabel>{t('Slug')}</FormLabel>
-
                 <FormControl>
                   <div className='relative'>
                     <Input
@@ -171,12 +149,12 @@ const ProductForm = ({
                     </button>
                   </div>
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+
         <div className='flex flex-col gap-5 md:flex-row'>
           <FormField
             control={form.control}
@@ -201,12 +179,12 @@ const ProductForm = ({
                 <FormControl>
                   <Input placeholder={t('Enter product brand')} {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+
         <div className='flex flex-col gap-5 md:flex-row'>
           <FormField
             control={form.control}
@@ -224,6 +202,7 @@ const ProductForm = ({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name='price'
@@ -237,6 +216,7 @@ const ProductForm = ({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name='countInStock'
@@ -293,7 +273,6 @@ const ProductForm = ({
                     </div>
                   </CardContent>
                 </Card>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -323,6 +302,7 @@ const ProductForm = ({
             )}
           />
         </div>
+
         <div>
           <FormField
             control={form.control}
@@ -340,6 +320,7 @@ const ProductForm = ({
             )}
           />
         </div>
+
         <div>
           <Button
             type='submit'

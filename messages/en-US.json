@@ -171,7 +171,22 @@
     "shippingAddress": "Shipping Address",
     "paymentMethod": "Payment Method",
     "itemsAndShipping": "Items and shipping",
-    "deliveryDate": "Delivery date"
+    "deliveryDate": "Delivery date",
+    "deliveredAt": "Delivered at",
+    "notDelivered": "Not delivered",
+    "expectedDelivery": "Expected delivery at",
+    "paidAt": "Paid at",
+    "notPaid": "Not paid",
+    "orderItems": "Order Items",
+    "item": "Item",
+    "playerId": "Player ID",
+    "quantity": "Quantity",
+    "price": "Price",
+    "shipping": "Shipping",
+    "total": "Total",
+    "payOrder": "Pay Order",
+    "markAsPaid": "Mark as paid",
+    "markAsDelivered": "Mark as delivered"
   },
   "Product": {
     "Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
@@ -312,8 +327,16 @@
     "update_product": "Update Product"
   },
   "CreateProductPage": {
+    "create_product": "create product",
+    "create_product_details": "create product details",
     "products": "Products",
     "create": "Create"
+  },
+  "AdminOrderDetailsPage": {
+    "orders": "Orders",
+    "order_id": "Order #{id}",
+    "order_details": "Order Details",
+    "order_details_description": "View and manage order details"
   },
   "OrdersPage": {
     "Admin permission required": "Admin permission required",
