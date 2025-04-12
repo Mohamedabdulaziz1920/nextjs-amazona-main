@@ -21,6 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UserSignUpSchema } from '@/lib/validator'
 import { Separator } from '@/components/ui/separator'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { useTranslations } from 'next-intl'
 
 const signUpDefaultValues =
   process.env.NODE_ENV === 'development'
@@ -41,6 +42,9 @@ export default function CredentialsSignInForm() {
   const {
     setting: { site },
   } = useSettingStore()
+
+  const t = useTranslations('SignUp.SignUpForm')
+
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/'
 
@@ -56,7 +60,7 @@ export default function CredentialsSignInForm() {
       const res = await registerUser(data)
       if (!res.success) {
         toast({
-          title: 'Error',
+          title: t('errorTitle'),
           description: res.error,
           variant: 'destructive',
         })
@@ -72,8 +76,8 @@ export default function CredentialsSignInForm() {
         throw error
       }
       toast({
-        title: 'Error',
-        description: 'Invalid email or password',
+        title: t('errorTitle'),
+        description: t('errorDescription'),
         variant: 'destructive',
       })
     }
@@ -89,9 +93,9 @@ export default function CredentialsSignInForm() {
             name='name'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('name')}</FormLabel>
                 <FormControl>
-                  <Input placeholder='Enter name address' {...field} />
+                  <Input placeholder={t('namePlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -103,9 +107,9 @@ export default function CredentialsSignInForm() {
             name='email'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
-                  <Input placeholder='Enter email address' {...field} />
+                  <Input placeholder={t('emailPlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,11 +121,11 @@ export default function CredentialsSignInForm() {
             name='password'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
                   <Input
                     type='password'
-                    placeholder='Enter password'
+                    placeholder={t('passwordPlaceholder')}
                     {...field}
                   />
                 </FormControl>
@@ -134,11 +138,11 @@ export default function CredentialsSignInForm() {
             name='confirmPassword'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>{t('confirmPassword')}</FormLabel>
                 <FormControl>
                   <Input
                     type='password'
-                    placeholder='Confirm Password'
+                    placeholder={t('confirmPasswordPlaceholder')}
                     {...field}
                   />
                 </FormControl>
@@ -147,18 +151,19 @@ export default function CredentialsSignInForm() {
             )}
           />
           <div>
-            <Button type='submit'>Sign Up</Button>
+            <Button type='submit'>{t('signUp')}</Button>
           </div>
           <div className='text-sm'>
-            By creating an account, you agree to {site.name}&apos;s{' '}
-            <Link href='/page/conditions-of-use'>Conditions of Use</Link> and{' '}
-            <Link href='/page/privacy-policy'> Privacy Notice. </Link>
+            {t('agreement')} {site.name}&apos;s{' '}
+            <Link href='/page/conditions-of-use'>{t('conditionsOfUse')}</Link>{' '}
+            {t('and')}{' '}
+            <Link href='/page/privacy-policy'>{t('privacyPolicy')}</Link>
           </div>
           <Separator className='mb-4' />
           <div className='text-sm'>
-            Already have an account?{' '}
+            {t('alreadyHaveAccount')}{' '}
             <Link className='link' href={`/sign-in?callbackUrl=${callbackUrl}`}>
-              Sign In
+              {t('signIn')}
             </Link>
           </div>
         </div>

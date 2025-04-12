@@ -17,19 +17,20 @@ import { deleteOrder, getAllOrders } from '@/lib/actions/order.actions'
 import { formatDateTime, formatId } from '@/lib/utils'
 import { IOrderList } from '@/types'
 import ProductPrice from '@/components/shared/product/product-price'
-
+import { getTranslations } from 'next-intl/server'
 export const metadata: Metadata = {
   title: 'Admin Orders',
 }
 export default async function OrdersPage(props: {
   searchParams: Promise<{ page: string }>
 }) {
+  const t = await getTranslations('OrdersPage')
   const searchParams = await props.searchParams
   const { page = '1' } = searchParams
 
   const session = await auth()
   if (session?.user.role !== 'Admin')
-    throw new Error('Admin permission required')
+    throw new Error(t('Admin permission required'))
 
   const orders = await getAllOrders({
     page: Number(page),
@@ -41,14 +42,14 @@ export default async function OrdersPage(props: {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Id</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Buyer</TableHead>
-              <TableHead>Player ID</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Paid</TableHead>
-              <TableHead>Delivered</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{t('Id')}</TableHead>
+              <TableHead>{t('Date')}</TableHead>
+              <TableHead>{t('Buyer')}</TableHead>
+              <TableHead>{t('Player ID')}</TableHead>
+              <TableHead>{t('Total')}</TableHead>
+              <TableHead>{t('Paid')}</TableHead>
+              <TableHead>{t('Delivered')}</TableHead>
+              <TableHead>{t('Actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

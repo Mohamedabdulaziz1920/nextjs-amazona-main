@@ -1,6 +1,6 @@
 'use client'
-import { redirect, useSearchParams } from 'next/navigation'
 
+import { redirect, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
@@ -16,11 +16,11 @@ import {
 import { useForm } from 'react-hook-form'
 import { IUserSignIn } from '@/types'
 import { signInWithCredentials } from '@/lib/actions/user.actions'
-
 import { toast } from '@/hooks/use-toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UserSignInSchema } from '@/lib/validator'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { useTranslations } from 'next-intl'
 
 const signInDefaultValues =
   process.env.NODE_ENV === 'development'
@@ -34,6 +34,7 @@ const signInDefaultValues =
       }
 
 export default function CredentialsSignInForm() {
+  const t = useTranslations('SignIn.SignInForm')
   const {
     setting: { site },
   } = useSettingStore()
@@ -59,8 +60,8 @@ export default function CredentialsSignInForm() {
         throw error
       }
       toast({
-        title: 'Error',
-        description: 'Invalid email or password',
+        title: t('errorTitle'),
+        description: t('errorDescription'),
         variant: 'destructive',
       })
     }
@@ -76,9 +77,9 @@ export default function CredentialsSignInForm() {
             name='email'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
-                  <Input placeholder='Enter email address' {...field} />
+                  <Input placeholder={t('emailPlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,11 +91,11 @@ export default function CredentialsSignInForm() {
             name='password'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
                   <Input
                     type='password'
-                    placeholder='Enter password'
+                    placeholder={t('passwordPlaceholder')}
                     {...field}
                   />
                 </FormControl>
@@ -104,12 +105,13 @@ export default function CredentialsSignInForm() {
           />
 
           <div>
-            <Button type='submit'>Sign In</Button>
+            <Button type='submit'>{t('signIn')}</Button>
           </div>
           <div className='text-sm'>
-            By signing in, you agree to {site.name}&apos;s{' '}
-            <Link href='/page/conditions-of-use'>Conditions of Use</Link> and{' '}
-            <Link href='/page/privacy-policy'>Privacy Notice.</Link>
+            {t('agreement', { siteName: site.name })}{' '}
+            <Link href='/page/conditions-of-use'>{t('conditionsOfUse')}</Link>{' '}
+            {t('and')}{' '}
+            <Link href='/page/privacy-policy'>{t('privacyPolicy')}</Link>
           </div>
         </div>
       </form>

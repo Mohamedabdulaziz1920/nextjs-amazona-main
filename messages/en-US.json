@@ -50,6 +50,50 @@
     "Best Sellers in T-Shirts": "Best Sellers in T-Shirts",
     "Best Deals on Wrist Watches": "Best Deals on Wrist Watches"
   },
+  "SignIn": {
+    "title": "Sign In",
+    "newToSite": "New to {siteName}?",
+    "createAccount": "Create your {siteName} account",
+    "SignInForm": {
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter password",
+      "signIn": "Sign In",
+      "errorTitle": "Error",
+      "errorDescription": "Invalid email or password",
+      "agreement": "By signing in, you agree to {siteName}'s",
+      "conditionsOfUse": "Conditions of Use",
+      "privacyPolicy": "Privacy Notice",
+      "and": "and"
+    },
+    "GoogleSignInForm": {
+      "signInWithGoogle": "Sign In with Google",
+      "redirecting": "Redirecting to Google..."
+    }
+  },
+  "SignUp": {
+    "Create account": "Create account",
+    "SignUpForm": {
+      "name": "Name",
+      "namePlaceholder": "Enter name",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter password",
+      "signUp": "Sign Up",
+      "errorTitle": "Error",
+      "errorDescription": "Invalid email or password",
+      "agreement": "By creating an account, you agree to",
+      "conditionsOfUse": "Conditions of Use",
+      "privacyPolicy": "Privacy Notice",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "and": "and"
+    }
+  },
   "AddToCartWithPlayerId": {
     "Player ID is required": "Player ID is required",
     "Player ID must contain only letters and numbers": "Player ID must contain only letters and numbers",
@@ -278,6 +322,7 @@
       "id": "ID",
       "date": "Date",
       "buyer": "Buyer",
+      "Player ID": "Player ID",
       "total": "Total",
       "paid": "Paid",
       "delivered": "Delivered",

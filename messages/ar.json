@@ -51,6 +51,50 @@
     "Best Sellers in T-Shirts": "الأكثر مبيعًا في التيشيرتات",
     "Best Deals on Wrist Watches": "أفضل العروض على ساعات المعصم"
   },
+  "SignIn": {
+    "title": "تسجيل الدخول",
+    "newToSite": "جديد على {siteName}؟",
+    "createAccount": "أنشئ حسابك في {siteName}",
+    "SignInForm": {
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل عنوان البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "signIn": "تسجيل الدخول",
+      "errorTitle": "خطأ",
+      "errorDescription": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "agreement": "بتسجيل الدخول، فإنك توافق على شروط {siteName}",
+      "conditionsOfUse": "شروط الاستخدام",
+      "privacyPolicy": "سياسة الخصوصية",
+      "and": "و"
+    },
+    "GoogleSignInForm": {
+      "signInWithGoogle": "تسجيل الدخول باستخدام جوجل",
+      "redirecting": "جارٍ التوجيه إلى جوجل..."
+    }
+  },
+  "SignUp": {
+    "Create account": " إنشاء حساب جديد",
+    "SignUpForm": {
+      "name": "الاسم",
+      "namePlaceholder": "أدخل الاسم",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+      "signUp": "إنشاء الحساب",
+      "errorTitle": "خطأ",
+      "errorDescription": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "agreement": "بإنشاء حساب، فإنك توافق على",
+      "conditionsOfUse": "شروط الاستخدام",
+      "privacyPolicy": "سياسة الخصوصية",
+      "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "and": "و"
+    }
+  },
   "Product": {
     "player id": "معرف اللاعب",
     "Enter your player ID": "‌أكتب الـID الخاص بك(PlayerId)",
@@ -202,6 +246,7 @@
       "id": "المعرف",
       "date": "التاريخ",
       "buyer": "المشتري",
+      "Player ID": "معرف اللاعب",
       "total": "المجموع",
       "paid": "مدفوع",
       "delivered": "تم التوصيل",

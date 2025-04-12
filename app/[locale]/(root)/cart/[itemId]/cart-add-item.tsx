@@ -47,14 +47,6 @@ export default function CartAddItem({ itemId }: { itemId: string }) {
                 <CheckCircle2Icon className='h-6 w-6 text-green-700' />
                 {t('Cart.Added to cart')}
               </h3>
-              <p className='text-sm'>
-                <span className='font-bold'> {t('Cart.Color')}: </span>{' '}
-                {item.color ?? '-'}
-              </p>
-              <p className='text-sm'>
-                <span className='font-bold'> {t('Cart.Size')}: </span>{' '}
-                {item.size ?? '-'}
-              </p>
             </div>
           </CardContent>
         </Card>

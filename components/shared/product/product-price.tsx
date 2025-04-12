@@ -45,16 +45,21 @@ const ProductPrice = ({
       {intValue}
       <span className='text-xs align-super'>{floatValue}</span>
     </div>
-  ) : isDeal ? (
+  ) : (
     <div className='space-y-2'>
       <div className='flex justify-center items-center gap-2'>
-        <span className='bg-red-700 rounded-sm p-1 text-white text-sm font-semibold'>
-          {discountPercent}% {t('Product.Off')}
-        </span>
-        <span className='text-red-700 text-xs font-bold'>
-          {t('Product.Limited time deal')}
-        </span>
+        {discountPercent > 0 && (
+          <div className='inline-block bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-md shadow-sm'>
+            -{discountPercent}%
+          </div>
+        )}
+        {isDeal && (
+          <span className='text-red-700 text-xs font-bold'>
+            {t('Product.Limited time deal')}
+          </span>
+        )}
       </div>
+
       <div
         className={`flex ${forListing && 'justify-center'} items-center gap-2`}
       >
@@ -73,27 +78,6 @@ const ProductPrice = ({
             })}
           </span>
         </div>
-      </div>
-    </div>
-  ) : (
-    <div className=''>
-      <div className='flex justify-center gap-3'>
-        <div className='text-3xl text-orange-700'>-{discountPercent}%</div>
-        <div className={cn('text-3xl', className)}>
-          <span className='text-xs align-super'>{currency.symbol}</span>
-          {intValue}
-          <span className='text-xs align-super'>{floatValue}</span>
-        </div>
-      </div>
-      <div className='text-muted-foreground text-xs py-2'>
-        {t('Product.List price')}:{' '}
-        <span className='line-through'>
-          {format.number(convertedListPrice, {
-            style: 'currency',
-            currency: currency.code,
-            currencyDisplay: 'narrowSymbol',
-          })}
-        </span>
       </div>
     </div>
   )
