@@ -241,6 +241,7 @@
   },
   "OrdersPage": {
     "Admin permission required": "مطلوب صلاحية مشرف",
+    "Manage and track all customer orders": "إدارة وتتبع جميع طلبات العملاء",
     "Orders": "الطلبات",
     "Id": "المعرف",
     "Date": "التاريخ",

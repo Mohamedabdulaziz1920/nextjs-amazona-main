@@ -317,6 +317,7 @@
   },
   "OrdersPage": {
     "Admin permission required": "Admin permission required",
+    "Manage and track all customer orders": "Manage and track all customer orders",
     "Orders": "Orders",
     "Id": "Id",
     "Date": "Date",
