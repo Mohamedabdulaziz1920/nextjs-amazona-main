@@ -55,12 +55,13 @@ export default async function OrdersPage(props: {
             <TableHeader className='bg-gray-50 dark:bg-gray-800'>
               <TableRow>
                 <TableHead className='w-[120px]'>{t('Id')}</TableHead>
-                <TableHead className='min-w-[150px]'>{t('Date')}</TableHead>
-                <TableHead>{t('Buyer')}</TableHead>
+
                 <TableHead>{t('Player ID')}</TableHead>
                 <TableHead className='text-right'>{t('Total')}</TableHead>
                 <TableHead>{t('Paid')}</TableHead>
                 <TableHead>{t('Delivered')}</TableHead>
+                <TableHead className='min-w-[150px]'>{t('Date')}</TableHead>
+                <TableHead>{t('Buyer')}</TableHead>
                 <TableHead className='w-[180px]'>{t('Actions')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -73,20 +74,7 @@ export default async function OrdersPage(props: {
                   <TableCell className='font-medium text-gray-900 dark:text-white'>
                     {formatId(order._id)}
                   </TableCell>
-                  <TableCell className='text-gray-600 dark:text-gray-400'>
-                    {formatDateTime(order.createdAt!).dateTime}
-                  </TableCell>
-                  <TableCell>
-                    {order.user ? (
-                      <span className='font-medium text-gray-900 dark:text-white'>
-                        {order.user.name}
-                      </span>
-                    ) : (
-                      <Badge variant='destructive' className='text-xs'>
-                        {t('Deleted User')}
-                      </Badge>
-                    )}
-                  </TableCell>
+
                   <TableCell>
                     {order.items[0]?.playerId || (
                       <span className='text-gray-500'>N/A</span>
@@ -122,6 +110,20 @@ export default async function OrdersPage(props: {
                         ? formatDateTime(order.deliveredAt).dateTime
                         : t('No')}
                     </Button>
+                  </TableCell>
+                  <TableCell className='text-gray-600 dark:text-gray-400'>
+                    {formatDateTime(order.createdAt!).dateTime}
+                  </TableCell>
+                  <TableCell>
+                    {order.user ? (
+                      <span className='font-medium text-gray-900 dark:text-white'>
+                        {order.user.name}
+                      </span>
+                    ) : (
+                      <Badge variant='destructive' className='text-xs'>
+                        {t('Deleted User')}
+                      </Badge>
+                    )}
                   </TableCell>
                   <TableCell className='flex gap-2'>
                     <Button
