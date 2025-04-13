@@ -50,7 +50,7 @@ const ProductPrice = ({
       <div className='flex justify-center items-center gap-2'>
         {discountPercent > 0 && (
           <div className='inline-block bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-md shadow-sm'>
-            -{discountPercent}%{t('Product.Off')}
+          {t('Product.Off')} -{discountPercent}%
           </div>
         )}
         {isDeal && (
