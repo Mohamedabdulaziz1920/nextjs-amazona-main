@@ -4,12 +4,16 @@ import { Home, PackageCheckIcon, User } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
+import { getTranslations } from 'next-intl/server'
 
 const PAGE_TITLE = 'Your Account'
 export const metadata: Metadata = {
   title: PAGE_TITLE,
 }
-export default function AccountPage() {
+
+export default async function AccountPage() {
+  const t = await getTranslations('AccountPage')
+  
   return (
     <div>
       <h1 className='h1-bold py-4'>{PAGE_TITLE}</h1>
@@ -21,9 +25,9 @@ export default function AccountPage() {
                 <PackageCheckIcon className='w-12 h-12' />
               </div>
               <div>
-                <h2 className='text-xl font-bold'>Orders</h2>
+                <h2 className='text-xl font-bold'>{t('Orders')}</h2>
                 <p className='text-muted-foreground'>
-                  Track, return, cancel an order, download invoice or buy again
+                  {t('OrdersDescription')}
                 </p>
               </div>
             </CardContent>
@@ -37,9 +41,9 @@ export default function AccountPage() {
                 <User className='w-12 h-12' />
               </div>
               <div>
-                <h2 className='text-xl font-bold'>Login & security</h2>
+                <h2 className='text-xl font-bold'>{t('LoginSecurity')}</h2>
                 <p className='text-muted-foreground'>
-                  Manage password, email and mobile number
+                  {t('LoginSecurityDescription')}
                 </p>
               </div>
             </CardContent>
@@ -53,9 +57,9 @@ export default function AccountPage() {
                 <Home className='w-12 h-12' />
               </div>
               <div>
-                <h2 className='text-xl font-bold'>Addresses</h2>
+                <h2 className='text-xl font-bold'>{t('Addresses')}</h2>
                 <p className='text-muted-foreground'>
-                  Edit, remove or set default address
+                  {t('AddressesDescription')}
                 </p>
               </div>
             </CardContent>
