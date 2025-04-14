@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import React from 'react'
+import { getTranslations } from 'next-intl/server'
 
 import { auth } from '@/auth'
 import { getOrderById } from '@/lib/actions/order.actions'
@@ -10,10 +11,12 @@ import { formatId } from '@/lib/utils'
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>
 }) {
+  const t = await getTranslations('AccountPage')
   const params = await props.params
+  const formattedId = formatId(params.id)
 
   return {
-    title: `Order ${formatId(params.id)}`,
+    title: t('OrderDetails', { id: formattedId }),
   }
 }
 
@@ -22,25 +25,28 @@ export default async function OrderDetailsPage(props: {
     id: string
   }>
 }) {
+  const t = await getTranslations('AccountPage')
   const params = await props.params
-
   const { id } = params
 
   const order = await getOrderById(id)
   if (!order) notFound()
 
   const session = await auth()
+  const formattedId = formatId(order._id)
 
   return (
     <>
       <div className='flex gap-2'>
-        <Link href='/account'>Your Account</Link>
+        <Link href='/account'>{t('BreadcrumbAccount')}</Link>
         <span>›</span>
-        <Link href='/account/orders'>Your Orders</Link>
+        <Link href='/account/orders'>{t('BreadcrumbOrders')}</Link>
         <span>›</span>
-        <span>Order {formatId(order._id)}</span>
+        <span>{t('BreadcrumbOrderDetails', { id: formattedId })}</span>
       </div>
-      <h1 className='h1-bold py-4'>Order {formatId(order._id)}</h1>
+      <h1 className='h1-bold py-4'>
+        {t('OrderDetails', { id: formattedId })}
+      </h1>
       <OrderDetailsForm
         order={order}
         isAdmin={session?.user?.role === 'Admin' || false}
