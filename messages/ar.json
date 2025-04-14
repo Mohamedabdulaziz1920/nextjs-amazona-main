@@ -73,6 +73,14 @@
       "redirecting": "جارٍ التوجيه إلى جوجل..."
     }
   },
+    "AccountPage": {
+    "Orders": "الطلبات",
+    "LoginSecurity": "تسجيل الدخول والأمان",
+    "LoginSecurityDescription": "إدارة كلمة المرور، البريد الإلكتروني ورقم الهاتف",
+    "Addresses": "العناوين",
+    "AddressesDescription": "تعديل، حذف أو تعيين عنوان افتراضي",
+    "OrdersDescription": "تتبع، إرجاع، إلغاء طلب، تحميل فاتورة أو شراء مرة أخرى"
+  },
   "SignUp": {
     "Create account": " إنشاء حساب جديد",
     "SignUpForm": {
