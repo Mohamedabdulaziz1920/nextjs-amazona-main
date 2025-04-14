@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 import Pagination from '@/components/shared/pagination'
 import {
@@ -20,39 +21,42 @@ const PAGE_TITLE = 'Your Orders'
 export const metadata: Metadata = {
   title: PAGE_TITLE,
 }
+
 export default async function OrdersPage(props: {
   searchParams: Promise<{ page: string }>
 }) {
+  const t = await getTranslations('AccountPage')
   const searchParams = await props.searchParams
   const page = Number(searchParams.page) || 1
   const orders = await getMyOrders({
     page,
   })
+
   return (
     <div>
       <div className='flex gap-2'>
-        <Link href='/account'>Your Account</Link>
+        <Link href='/account'>{t('YourAccount')}</Link>
         <span>›</span>
-        <span>{PAGE_TITLE}</span>
+        <span>{t('YourOrders')}</span>
       </div>
-      <h1 className='h1-bold pt-4'>{PAGE_TITLE}</h1>
+      <h1 className='h1-bold pt-4'>{t('YourOrders')}</h1>
       <div className='overflow-x-auto'>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Id</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Paid</TableHead>
-              <TableHead>Delivered</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{t('OrderId')}</TableHead>
+              <TableHead>{t('OrderDate')}</TableHead>
+              <TableHead>{t('OrderTotal')}</TableHead>
+              <TableHead>{t('OrderPaid')}</TableHead>
+              <TableHead>{t('OrderDelivered')}</TableHead>
+              <TableHead>{t('OrderActions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orders.data.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} className=''>
-                  You have no orders.
+                  {t('NoOrders')}
                 </TableCell>
               </TableRow>
             )}
@@ -72,16 +76,16 @@ export default async function OrdersPage(props: {
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime
-                    : 'No'}
+                    : t('No')}
                 </TableCell>
                 <TableCell>
                   {order.isDelivered && order.deliveredAt
                     ? formatDateTime(order.deliveredAt).dateTime
-                    : 'No'}
+                    : t('No')}
                 </TableCell>
                 <TableCell>
                   <Link href={`/account/orders/${order._id}`}>
-                    <span className='px-2'>Details</span>
+                    <span className='px-2'>{t('Details')}</span>
                   </Link>
                 </TableCell>
               </TableRow>
