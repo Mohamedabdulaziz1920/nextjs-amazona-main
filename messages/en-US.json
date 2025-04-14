@@ -50,6 +50,14 @@
     "Best Sellers in T-Shirts": "Best Sellers in T-Shirts",
     "Best Deals on Wrist Watches": "Best Deals on Wrist Watches"
   },
+    "AccountPage": {
+    "Orders": "Orders",
+    "LoginSecurity": "Login & security",
+    "LoginSecurityDescription": "Manage password, email and mobile number",
+    "Addresses": "Addresses",
+    "AddressesDescription": "Edit, remove or set default address",
+    "OrdersDescription": "Track, return, cancel an order, download invoice or buy again"
+  },
   "SignIn": {
     "title": "Sign In",
     "newToSite": "New to {siteName}?",
