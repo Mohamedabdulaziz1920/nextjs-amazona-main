@@ -19,8 +19,9 @@ import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { updateUserName } from '@/lib/actions/user.actions'
 import { UserNameSchema } from '@/lib/validator'
-
+import { useTranslations } from 'next-intl'
 export const ProfileForm = () => {
+  const t = useTranslations('AccountPage')
   const router = useRouter()
   const { data: session, update } = useSession()
   const form = useForm<z.infer<typeof UserNameSchema>>({
@@ -57,7 +58,7 @@ export const ProfileForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='  flex flex-col gap-5'
+        className='flex flex-col gap-5'
       >
         <div className='flex flex-col gap-5'>
           <FormField
@@ -65,10 +66,10 @@ export const ProfileForm = () => {
             name='name'
             render={({ field }) => (
               <FormItem className='w-full'>
-                <FormLabel className='font-bold'>New name</FormLabel>
+                <FormLabel className='font-bold'>{t('NewName')}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Name'
+                    placeholder={t('NamePlaceholder')}
                     {...field}
                     className='input-field'
                   />
@@ -85,7 +86,7 @@ export const ProfileForm = () => {
           disabled={form.formState.isSubmitting}
           className='button col-span-2 w-full'
         >
-          {form.formState.isSubmitting ? 'Submitting...' : 'Save Changes'}
+          {form.formState.isSubmitting ? t('Submitting') : t('SaveChanges')}
         </Button>
       </form>
     </Form>
